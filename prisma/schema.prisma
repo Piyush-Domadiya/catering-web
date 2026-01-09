@@ -1,0 +1,130 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  role      String   @default("STAFF") // ADMIN or STAFF
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  email     String?  @unique
+  phone     String
+  address   String?
+  events    Event[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MenuCategory {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  items     MenuItem[]
+  createdAt DateTime   @default(now())
+}
+
+model MenuItem {
+  id          String       @id @default(cuid())
+  name        String
+  description String?
+  price       Float
+  category    MenuCategory @relation(fields: [categoryId], references: [id])
+  categoryId  String
+  image       String?
+  available   Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Event {
+  id         String       @id @default(cuid())
+  name       String
+  date       DateTime
+  location   String
+  type       String // Wedding, Birthday, Corporate, etc.
+  time       String?
+  status     String       @default("UPCOMING") // UPCOMING, COMPLETED, CANCELLED
+  customer   Customer     @relation(fields: [customerId], references: [id])
+  customerId String
+  images     EventImage[]
+  staff      EventStaff[]
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+}
+
+model EventImage {
+  id      String @id @default(cuid())
+  url     String
+  event   Event  @relation(fields: [eventId], references: [id])
+  eventId String
+}
+
+model Staff {
+  id        String       @id @default(cuid())
+  name      String
+  role      String // Chef, Helper, Manager
+  phone     String
+  events    EventStaff[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
+model EventStaff {
+  id      String @id @default(cuid())
+  event   Event  @relation(fields: [eventId], references: [id])
+  eventId String
+  staff   Staff  @relation(fields: [staffId], references: [id])
+  staffId String
+
+  @@unique([eventId, staffId])
+}
+
+model ContactInquiry {
+  id            String   @id @default(cuid())
+  name          String
+  email         String
+  phone         String
+  eventType     String
+  guestCount    Int?
+  eventDate     String?
+  venueLocation String?
+  message       String?
+  status        String   @default("NEW") // NEW, CONTACTED, CONVERTED, CLOSED
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Package {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  price       Float
+  features    String // JSON string or comma-separated
+  tag         String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Highlight {
+  id        String   @id @default(cuid())
+  title     String?
+  imageUrl  String
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
