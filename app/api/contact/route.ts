@@ -6,6 +6,7 @@ export async function POST(req: Request) {
     const {
       name,
       email,
+      phone,
       eventType,
       guestCount,
       eventDate,
@@ -13,8 +14,8 @@ export async function POST(req: Request) {
       message,
     } = await req.json();
 
-    if (!name || !email || !eventType) {
-      return new NextResponse("Name, email, and event type are required", {
+    if (!name || !email || !phone || !eventType) {
+      return new NextResponse("Name, email, phone, and event type are required", {
         status: 400,
       });
     }
@@ -23,6 +24,7 @@ export async function POST(req: Request) {
       data: {
         name,
         email,
+        phone,
         eventType,
         guestCount: guestCount ? parseInt(guestCount) : null,
         eventDate,

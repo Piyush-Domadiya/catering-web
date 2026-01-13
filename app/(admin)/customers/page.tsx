@@ -97,10 +97,10 @@ export default function CustomersPage() {
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-3xl font-bold text-text-primary">
             Customer Management
           </h1>
-          <p className="text-gray-500 dark:text-gray-400">
+          <p className="text-text-secondary">
             View and manage your loyal customers and their history.
           </p>
         </div>
@@ -113,16 +113,16 @@ export default function CustomersPage() {
         </button>
       </div>
 
-      <div className="bg-white dark:bg-slate-950 rounded-[2.5rem] border border-gray-100 dark:border-slate-800 shadow-sm overflow-hidden">
-        <div className="p-8 border-b border-gray-50 dark:border-slate-800 flex items-center gap-4">
+      <div className="bg-bg-primary rounded-[2.5rem] border border-border-color shadow-sm overflow-hidden">
+        <div className="p-8 border-b border-border-color flex items-center gap-4">
           <div className="relative flex-grow">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted" />
             <input
               type="text"
               placeholder="Search by name or email..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-slate-900 border border-transparent focus:bg-white dark:focus:bg-slate-800 focus:border-amber-500 focus:outline-none transition-all text-gray-900 dark:text-white"
+              className="w-full pl-12 pr-4 py-3 rounded-xl bg-bg-secondary border border-transparent focus:bg-bg-primary focus:border-amber-500 focus:outline-none transition-all text-text-primary"
             />
           </div>
         </div>
@@ -135,7 +135,7 @@ export default function CustomersPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
-                <tr className="text-gray-400 text-sm font-bold border-b border-gray-50 dark:border-slate-800">
+                <tr className="text-text-muted text-sm font-bold border-b border-border-color">
                   <th className="px-8 py-5">CUSTOMER</th>
                   <th className="px-8 py-5">CONTACT</th>
                   <th className="px-8 py-5">ADDRESS</th>
@@ -143,22 +143,22 @@ export default function CustomersPage() {
                   <th className="px-8 py-5 text-center">ACTIONS</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-50 dark:divide-slate-800">
+              <tbody className="divide-y divide-border-color">
                 {filteredCustomers.map((customer) => (
                   <tr
                     key={customer.id}
-                    className="group hover:bg-gray-50 dark:hover:bg-slate-900 transition-colors"
+                    className="group hover:bg-bg-secondary transition-colors"
                   >
                     <td className="px-8 py-6">
                       <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-gray-100 dark:bg-slate-800 flex items-center justify-center text-gray-700 dark:text-gray-300 font-bold overflow-hidden">
+                        <div className="w-12 h-12 rounded-2xl bg-bg-secondary flex items-center justify-center text-text-secondary font-bold overflow-hidden">
                           {customer.name.charAt(0)}
                         </div>
                         <div>
-                          <p className="font-bold text-gray-900 dark:text-white uppercase tracking-tight">
+                          <p className="font-bold text-text-primary uppercase tracking-tight">
                             {customer.name}
                           </p>
-                          <p className="text-xs text-gray-400">
+                          <p className="text-xs text-text-muted">
                             ID: {customer.id.slice(0, 8)}
                           </p>
                         </div>
@@ -166,17 +166,17 @@ export default function CustomersPage() {
                     </td>
                     <td className="px-8 py-6">
                       <div className="space-y-1">
-                        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 font-medium">
+                        <div className="flex items-center gap-2 text-sm text-text-secondary font-medium">
                           <Mail className="h-3.5 w-3.5 text-amber-500" />
                           {customer.email || "N/A"}
                         </div>
-                        <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 font-medium">
+                        <div className="flex items-center gap-2 text-sm text-text-secondary font-medium">
                           <Phone className="h-3.5 w-3.5 text-amber-500" />
                           {customer.phone}
                         </div>
                       </div>
                     </td>
-                    <td className="px-8 py-6 text-sm text-gray-600 dark:text-gray-400 font-medium">
+                    <td className="px-8 py-6 text-sm text-text-secondary font-medium">
                       {customer.address || "N/A"}
                     </td>
                     <td className="px-8 py-6">
@@ -217,10 +217,10 @@ export default function CustomersPage() {
 
         {!isLoading && filteredCustomers.length === 0 && (
           <div className="py-20 text-center">
-            <h3 className="text-gray-900 dark:text-white font-bold mb-1">
+            <h3 className="text-text-primary font-bold mb-1">
               No customers found
             </h3>
-            <p className="text-gray-500 dark:text-gray-400">
+            <p className="text-text-muted">
               {searchQuery
                 ? "Try a different search term."
                 : "Add your first customer to get started."}

@@ -17,8 +17,8 @@ export const metadata: Metadata = {
   description:
     "Making Every Event Testful. Professional catering services for weddings, corporate events, and parties.",
   icons: {
-    icon: [{ url: "/favicon.png" }, { url: "/icon.png", sizes: "any" }],
-    apple: "/icon.png",
+    icon: "/Logo.png",
+    apple: "/Logo.png",
   },
   openGraph: {
     title: "Testful Affaire | Premium Catering Services",

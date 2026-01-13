@@ -7,7 +7,7 @@ import { ArrowRight, Star } from "lucide-react";
 
 export function HomeHero() {
   return (
-    <section className="relative min-h-[85vh] w-full flex items-center justify-center overflow-hidden bg-white dark:bg-[#050505] transition-colors duration-700 py-20">
+    <section className="relative min-h-[85vh] w-full flex items-center justify-center overflow-hidden bg-bg-primary transition-colors duration-700 py-20">
       {/* Dark Mode Background Image */}
       <div className="absolute inset-0 z-0 opacity-0 dark:opacity-100 transition-opacity duration-700">
         <Image
@@ -20,7 +20,7 @@ export function HomeHero() {
       </div>
 
       {/* Light Mode Abstract Background */}
-      <div className="absolute inset-0 z-0 opacity-100 dark:opacity-0 transition-opacity duration-700 bg-gradient-to-br from-amber-50 via-white to-orange-50/30">
+      <div className="absolute inset-0 z-0 opacity-100 dark:opacity-0 transition-opacity duration-700 bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-tertiary/30">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03]"></div>
         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-b from-amber-200/20 to-transparent rounded-full blur-[100px] translate-x-1/2 -translate-y-1/2"></div>
       </div>
@@ -35,14 +35,14 @@ export function HomeHero() {
           transition={{ duration: 0.8 }}
           className="max-w-3xl"
         >
-          <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-amber-100/80 dark:bg-white/10 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-white/10 backdrop-blur-md shadow-sm">
+          <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-bg-secondary/80 text-amber-700 dark:text-amber-400 border border-border-color backdrop-blur-md shadow-sm">
             <Star className="h-4 w-4 fill-current" />
             <span className="text-sm font-bold tracking-wide uppercase">
               Premier Catering Services
             </span>
           </div>
 
-          <h1 className="text-6xl md:text-8xl font-bold leading-tight mb-8 text-gray-900 dark:text-white tracking-tight">
+          <h1 className="text-6xl md:text-8xl font-bold leading-tight mb-8 text-text-primary tracking-tight">
             Making Every Event{" "}
             <span className="relative inline-block">
               <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-amber-600 dark:from-amber-400 dark:to-amber-500">
@@ -52,7 +52,7 @@ export function HomeHero() {
             </span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-12 leading-relaxed max-w-2xl font-light">
+          <p className="text-xl md:text-2xl text-text-secondary mb-12 leading-relaxed max-w-2xl font-light">
             Experience the pinnacle of culinary excellence. We provide bespoke
             catering solutions tailored to your unique taste, style, and
             moments.
@@ -61,14 +61,14 @@ export function HomeHero() {
           <div className="flex flex-wrap gap-4">
             <Link
               href="/plan-menu"
-              className="bg-gray-900 dark:bg-gradient-to-r dark:from-amber-500 dark:to-amber-600 text-white px-10 py-5 rounded-full font-bold flex items-center gap-3 hover:bg-gray-800 dark:hover:from-amber-600 dark:hover:to-amber-700 transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 active:scale-95 text-lg"
+              className="bg-text-primary text-bg-primary px-10 py-5 rounded-full font-bold flex items-center gap-3 hover:bg-amber-500 hover:text-white transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 active:scale-95 text-lg"
             >
               Start Planning Menu
               <ArrowRight className="h-5 w-5" />
             </Link>
             <Link
               href="/contact"
-              className="bg-white/80 dark:bg-white/10 text-gray-900 dark:text-white px-10 py-5 rounded-full font-bold border border-gray-200 dark:border-white/10 hover:bg-white dark:hover:bg-white/20 transition-all hover:shadow-lg active:scale-95 text-lg backdrop-blur-md"
+              className="bg-bg-secondary/80 text-text-primary px-10 py-5 rounded-full font-bold border border-border-color hover:bg-bg-primary transition-all hover:shadow-lg active:scale-95 text-lg backdrop-blur-md"
             >
               Contact Us
             </Link>
@@ -79,7 +79,7 @@ export function HomeHero() {
       {/* Scroll Indicator */}
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce hidden md:block">
         <div className="w-6 h-10 rounded-full border-2 border-gray-400 dark:border-gray-600 flex justify-center p-1 opacity-50">
-          <div className="w-1 h-3 rounded-full bg-gray-600 dark:bg-gray-400 animate-scroll"></div>
+          <div className="w-1 h-3 rounded-full bg-text-muted animate-scroll"></div>
         </div>
       </div>
     </section>

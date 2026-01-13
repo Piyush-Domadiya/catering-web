@@ -113,17 +113,17 @@ export function MenuManager({ initialItems, categories }: MenuManagerProps) {
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-3xl font-bold text-text-primary">
             Menu Management
           </h1>
-          <p className="text-gray-500 dark:text-gray-400">
+          <p className="text-text-secondary">
             Configure your menu items, categories, and pricing.
           </p>
         </div>
         <div className="flex gap-4">
           <button
             onClick={() => setIsCategoryManagerOpen(true)}
-            className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all active:scale-95"
+            className="bg-bg-secondary text-text-secondary px-6 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-bg-tertiary transition-all active:scale-95"
           >
             <FolderEdit className="h-5 w-5" />
             Manage Categories
@@ -140,24 +140,24 @@ export function MenuManager({ initialItems, categories }: MenuManagerProps) {
 
       {/* ... table code ... */}
 
-      <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border border-gray-100 dark:border-slate-800 shadow-sm overflow-hidden">
+      <div className="bg-bg-primary rounded-[2.5rem] border border-border-color shadow-sm overflow-hidden">
         {/* ... table content ... */}
-        <div className="p-6 border-b border-gray-100 dark:border-slate-800">
+        <div className="p-6 border-b border-border-color">
           <div className="relative max-w-md">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted" />
             <input
               type="text"
               placeholder="Search items..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-slate-800 border border-transparent focus:bg-white dark:focus:bg-slate-950 focus:border-amber-500 focus:outline-none transition-all"
+              className="w-full pl-12 pr-4 py-3 rounded-xl bg-bg-secondary border border-transparent focus:bg-bg-primary focus:border-amber-500 focus:outline-none transition-all text-text-primary"
             />
           </div>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="text-gray-400 text-sm font-bold border-b border-gray-50 dark:border-slate-800">
+              <tr className="text-text-muted text-sm font-bold border-b border-border-color">
                 <th className="px-8 py-5">ITEM NAME</th>
                 <th className="px-8 py-5">CATEGORY</th>
                 <th className="px-8 py-5">PRICE</th>
@@ -165,15 +165,15 @@ export function MenuManager({ initialItems, categories }: MenuManagerProps) {
                 <th className="px-8 py-5 text-center">ACTIONS</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50 dark:divide-slate-800">
+            <tbody className="divide-y divide-border-color">
               {filteredItems.map((item) => (
                 <tr
                   key={item.id}
-                  className="group hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors"
+                  className="group hover:bg-bg-secondary transition-colors"
                 >
                   <td className="px-8 py-6">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center text-amber-600 dark:text-amber-500">
+                      <div className="w-12 h-12 rounded-2xl bg-bg-secondary flex items-center justify-center text-amber-600 dark:text-amber-500">
                         {item.image ? (
                           // eslint-disable-next-line @next/next/no-img-element
                           <img
@@ -185,17 +185,15 @@ export function MenuManager({ initialItems, categories }: MenuManagerProps) {
                           <Utensils className="h-5 w-5" />
                         )}
                       </div>
-                      <p className="font-bold text-gray-900 dark:text-white">
-                        {item.name}
-                      </p>
+                      <p className="font-bold text-text-primary">{item.name}</p>
                     </div>
                   </td>
                   <td className="px-8 py-6">
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-slate-800 px-3 py-1 rounded-lg">
+                    <span className="text-sm font-medium text-text-secondary bg-bg-secondary px-3 py-1 rounded-lg">
                       {item.category?.name || "Uncategorized"}
                     </span>
                   </td>
-                  <td className="px-8 py-6 text-sm font-bold text-gray-900 dark:text-white">
+                  <td className="px-8 py-6 text-sm font-bold text-text-primary">
                     ₹{item.price.toFixed(2)}
                   </td>
                   <td className="px-8 py-6">
@@ -234,10 +232,7 @@ export function MenuManager({ initialItems, categories }: MenuManagerProps) {
               ))}
               {filteredItems.length === 0 && (
                 <tr>
-                  <td
-                    colSpan={5}
-                    className="text-center py-10 text-gray-500 dark:text-gray-400"
-                  >
+                  <td colSpan={5} className="text-center py-10 text-text-muted">
                     No items found. Click "Add New Item" to create one.
                   </td>
                 </tr>

@@ -37,25 +37,25 @@ export function MenuGrid({ categories, items }: MenuGridProps) {
     <>
       {/* Premium Sticky Search & Filter Bar */}
       <div className="sticky top-20 z-40 py-6 transition-all duration-300">
-        <div className="absolute inset-0 glass-strong border-b border-white/5 shadow-2xl backdrop-blur-xl"></div>
+        <div className="absolute inset-0 bg-bg-primary/80 border-b border-border-color shadow-2xl backdrop-blur-xl"></div>
         <div className="relative max-w-7xl mx-auto px-4 space-y-6">
           <div className="flex flex-col md:flex-row gap-6 justify-between items-center">
             {/* Elegant Search */}
             <div className="relative w-full md:w-96 group">
               <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-amber-600/20 rounded-2xl blur-lg opacity-0 group-focus-within:opacity-100 transition-opacity duration-500"></div>
-              <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-amber-500 transition-colors z-10" />
+              <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted group-focus-within:text-amber-500 transition-colors z-10" />
               <input
                 type="text"
                 placeholder="Search our culinary delights..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="relative w-full pl-12 pr-4 py-4 rounded-2xl bg-white/50 dark:bg-black/20 border border-gray-200 dark:border-white/10 focus:bg-white dark:focus:bg-black/40 focus:border-amber-500/50 focus:outline-none transition-all dark:text-white placeholder:text-gray-400 shadow-sm backdrop-blur-md"
+                className="relative w-full pl-12 pr-4 py-4 rounded-2xl bg-bg-secondary border border-border-color focus:bg-bg-primary focus:border-amber-500/50 focus:outline-none transition-all text-text-primary placeholder:text-text-muted shadow-sm backdrop-blur-md"
               />
             </div>
 
             {/* Premium Filter Tabs */}
             <div className="w-full md:w-auto overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
-              <div className="flex gap-3 p-1">
+              <div className="flex flex-wrap gap-3 p-1">
                 {filterCategories.map((cat) => (
                   <button
                     key={cat.id}
@@ -63,7 +63,7 @@ export function MenuGrid({ categories, items }: MenuGridProps) {
                     className={`relative px-6 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition-all overflow-hidden group ${
                       selectedCategory === cat.id
                         ? "text-white shadow-lg shadow-amber-500/25"
-                        : "bg-white/50 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:bg-white dark:hover:bg-white/10"
+                        : "bg-bg-secondary text-text-secondary hover:bg-bg-tertiary"
                     }`}
                   >
                     {selectedCategory === cat.id && (
@@ -98,7 +98,7 @@ export function MenuGrid({ categories, items }: MenuGridProps) {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.4, delay: index * 0.05 }}
-                className="group relative bg-white dark:bg-gray-900/40 rounded-[2.5rem] p-5 hover:shadow-2xl hover:shadow-amber-500/10 border border-gray-100 dark:border-white/5 transition-all duration-500 backdrop-blur-sm overflow-hidden"
+                className="group relative bg-bg-primary rounded-[2.5rem] p-5 hover:shadow-2xl hover:shadow-amber-500/10 border border-border-color transition-all duration-500 backdrop-blur-sm overflow-hidden"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-amber-500/0 via-transparent to-amber-500/0 group-hover:from-amber-500/5 group-hover:to-amber-500/5 transition-colors duration-500"></div>
 
@@ -124,7 +124,7 @@ export function MenuGrid({ categories, items }: MenuGridProps) {
                         <span className="inline-block bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-500 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mb-2 border border-amber-100 dark:border-amber-500/20">
                           {item.category.name}
                         </span>
-                        <h3 className="text-2xl font-bold text-gray-900 dark:text-white leading-tight bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent transition-colors">
+                        <h3 className="text-2xl font-bold text-text-primary leading-tight transition-colors">
                           {item.name}
                         </h3>
                       </div>
@@ -133,17 +133,17 @@ export function MenuGrid({ categories, items }: MenuGridProps) {
                       </span>
                     </div>
 
-                    <p className="text-gray-500 dark:text-gray-400 text-sm mb-6 line-clamp-2 leading-relaxed">
+                    <p className="text-text-secondary text-sm mb-6 line-clamp-2 leading-relaxed">
                       {item.description ||
                         "A masterpiece of flavors, carefully curated for an exquisite dining experience."}
                     </p>
 
                     <div className="mt-auto flex gap-3">
-                      <button className="flex-1 group/btn flex items-center justify-center gap-2 bg-gray-50 dark:bg-white/5 text-gray-900 dark:text-white font-bold py-3.5 rounded-xl hover:bg-amber-500 hover:text-white dark:hover:bg-amber-500 transition-all text-sm border border-gray-200 dark:border-white/10 hover:border-amber-500 dark:hover:border-amber-500">
+                      <button className="flex-1 group/btn flex items-center justify-center gap-2 bg-bg-secondary text-text-primary font-bold py-3.5 rounded-xl hover:bg-amber-500 hover:text-white transition-all text-sm border border-border-color hover:border-amber-500">
                         View Details
                         <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
                       </button>
-                      <button className="w-14 h-14 flex items-center justify-center bg-gray-900 dark:bg-white text-white dark:text-black rounded-xl hover:bg-amber-500 dark:hover:bg-amber-500 hover:text-white dark:hover:text-white transition-all shadow-lg hover:shadow-amber-500/30 hover:scale-105 active:scale-95">
+                      <button className="w-14 h-14 flex items-center justify-center bg-text-primary text-bg-primary rounded-xl hover:bg-amber-500 hover:text-white transition-all shadow-lg hover:shadow-amber-500/30 hover:scale-105 active:scale-95">
                         <ShoppingBag className="h-5 w-5" />
                       </button>
                     </div>
@@ -155,13 +155,13 @@ export function MenuGrid({ categories, items }: MenuGridProps) {
 
           {filteredItems.length === 0 && (
             <div className="col-span-full text-center py-32">
-              <div className="w-24 h-24 bg-gray-50 dark:bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6 text-gray-300 dark:text-gray-600 animate-pulse">
+              <div className="w-24 h-24 bg-bg-secondary rounded-full flex items-center justify-center mx-auto mb-6 text-text-muted animate-pulse">
                 <Filter className="h-10 w-10" />
               </div>
-              <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">
+              <h3 className="text-3xl font-bold text-text-primary mb-3">
                 No culinary matches found
               </h3>
-              <p className="text-gray-500 dark:text-gray-400 max-w-md mx-auto mb-8">
+              <p className="text-text-secondary max-w-md mx-auto mb-8">
                 We couldn't find any items matching your criteria. Try exploring
                 our other exquisite categories.
               </p>

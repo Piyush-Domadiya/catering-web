@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 
 export function GalleryHeader() {
   return (
-    <div className="relative h-[40vh] min-h-[400px] flex items-center justify-center overflow-hidden transition-colors duration-500 bg-amber-50/50 dark:bg-black">
+    <div className="relative h-[40vh] min-h-[400px] flex items-center justify-center overflow-hidden transition-colors duration-500 bg-bg-secondary">
       {/* Background Gradient Mesh */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white via-amber-50/50 to-orange-50/30 dark:from-gray-900 dark:via-black dark:to-gray-900 transition-colors duration-500"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-tertiary/30 transition-colors duration-500"></div>
 
       {/* Animated Glow Effects */}
       <div className="absolute inset-0 opacity-40 dark:opacity-30">
@@ -20,21 +20,21 @@ export function GalleryHeader() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-white/60 dark:bg-white/5 border border-amber-100 dark:border-white/10 backdrop-blur-md shadow-sm">
+          <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-bg-primary/60 border border-border-color backdrop-blur-md shadow-sm">
             <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
             <span className="text-sm font-medium text-amber-800 dark:text-amber-400 tracking-wide uppercase">
               Visual Journey
             </span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-gray-900 dark:text-white tracking-tight">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-text-primary tracking-tight">
             Our{" "}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-amber-600 dark:from-amber-400 dark:to-amber-500">
               Masterpieces
             </span>
           </h1>
 
-          <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-2xl mx-auto font-light">
+          <p className="text-xl text-text-secondary leading-relaxed max-w-2xl mx-auto font-light">
             Explore a curated collection of our finest culinary creations and
             memorable events. Each image tells a story of taste, elegance, and
             passion.
@@ -43,7 +43,7 @@ export function GalleryHeader() {
       </div>
 
       {/* Decorative Elements */}
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#fdfdfd] dark:from-[#0a0a0a] to-transparent z-10"></div>
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-bg-primary to-transparent z-10"></div>
     </div>
   );
 }

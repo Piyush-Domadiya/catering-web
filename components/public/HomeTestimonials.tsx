@@ -34,7 +34,7 @@ export function HomeTestimonials() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-4xl gradient-radial-amber opacity-20 pointer-events-none"></div>
 
       <div className="text-center mb-16 relative z-10">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-4">
           Voices of Satisfaction
         </h2>
         <div className="w-20 h-1 bg-gradient-to-r from-amber-500 to-amber-600 mx-auto rounded-full glow-amber-sm" />
@@ -48,11 +48,11 @@ export function HomeTestimonials() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.1 }}
-            className="glass p-8 rounded-[2rem] border border-gray-100 dark:border-gray-800 relative group hover:border-amber-200 dark:hover:border-amber-500/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+            className="glass p-8 rounded-[2rem] border border-border-color dark:border-gray-800/50 relative group hover:border-amber-400/50 dark:hover:border-amber-500/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-amber-500/10"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-white/0 dark:from-white/5 dark:to-transparent rounded-[2rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent rounded-[2rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
 
-            <Quote className="absolute top-6 right-8 h-12 w-12 text-amber-500/10 group-hover:text-amber-500/20 transition-colors duration-300" />
+            <Quote className="absolute top-6 right-8 h-12 w-12 text-amber-500/5 group-hover:text-amber-500/20 transition-all duration-500 rotate-12" />
 
             <div className="flex gap-1 mb-6">
               {[...Array(t.rating)].map((_, i) => (
@@ -63,21 +63,19 @@ export function HomeTestimonials() {
               ))}
             </div>
 
-            <p className="text-gray-700 dark:text-gray-300 italic mb-8 relative z-10 leading-relaxed font-medium">
+            <p className="text-text-secondary italic mb-8 relative z-10 leading-relaxed font-medium">
               "{t.content}"
             </p>
 
             <div className="flex items-center gap-4">
-              <div className="h-10 w-10 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white font-bold text-lg shadow-lg">
+              <div className="h-12 w-12 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-white font-bold text-xl shadow-lg ring-4 ring-amber-500/10">
                 {t.name.charAt(0)}
               </div>
               <div>
-                <h4 className="font-bold text-gray-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+                <h4 className="font-bold text-text-primary group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
                   {t.name}
                 </h4>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {t.role}
-                </p>
+                <p className="text-sm text-text-muted">{t.role}</p>
               </div>
             </div>
           </motion.div>

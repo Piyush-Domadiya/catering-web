@@ -36,7 +36,7 @@ export function HomeServices() {
       <div className="absolute inset-0 gradient-radial-amber opacity-20 pointer-events-none"></div>
 
       <div className="text-center mb-16 relative z-10">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-4">
           Our Premium Services
         </h2>
         <div className="w-20 h-1 bg-gradient-to-r from-amber-500 to-amber-600 mx-auto glow-amber-sm rounded-full" />
@@ -50,15 +50,15 @@ export function HomeServices() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.1 }}
-            className="premium-card p-8 rounded-3xl group cursor-pointer hover-glow"
+            className="premium-card p-8 rounded-[2.5rem] group cursor-pointer hover:border-amber-400/50 dark:hover:border-amber-500/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-amber-500/10"
           >
-            <div className="w-14 h-14 bg-gradient-to-br from-amber-100 to-amber-50 dark:from-amber-500/20 dark:to-amber-500/10 rounded-2xl flex items-center justify-center mb-6 group-hover:from-amber-500 group-hover:to-amber-600 transition-all duration-300 glow-amber-sm group-hover:glow-amber">
+            <div className="w-14 h-14 bg-gradient-to-br from-amber-100 to-amber-50 dark:from-amber-500/20 dark:to-amber-500/10 rounded-2xl flex items-center justify-center mb-6 group-hover:from-amber-500 group-hover:to-amber-600 transition-all duration-500 glow-amber-sm group-hover:glow-amber">
               <service.icon className="h-7 w-7 text-amber-600 dark:text-amber-400 group-hover:text-white transition-colors" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+            <h3 className="text-xl font-bold text-text-primary mb-3 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
               {service.title}
             </h3>
-            <p className="text-gray-500 dark:text-gray-400 leading-relaxed">
+            <p className="text-text-secondary leading-relaxed">
               {service.description}
             </p>
           </motion.div>

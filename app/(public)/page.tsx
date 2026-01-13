@@ -18,7 +18,6 @@ const partners = [
 export const revalidate = 60; // Revalidate every minute
 
 export default async function HomePage() {
-  // @ts-ignore - Prisma client will be regenerated on server restart
   const highlights = await prisma.highlight.findMany({
     where: { active: true },
     orderBy: { createdAt: "desc" },
@@ -31,15 +30,15 @@ export default async function HomePage() {
 
       {/* Trusted By Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 relative z-20">
-        <div className="glass-strong p-8 rounded-[2.5rem] shadow-2xl border border-gray-100 dark:border-gray-800 hover-glow">
-          <p className="text-center text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-8">
+        <div className="bg-bg-primary p-8 rounded-[2.5rem] shadow-2xl border border-border-color hover-glow">
+          <p className="text-center text-xs font-bold text-text-muted uppercase tracking-widest mb-8">
             Trusted by Industry Leaders
           </p>
           <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
             {partners.map((partner) => (
               <span
                 key={partner}
-                className="text-2xl font-black text-gray-900 dark:text-white"
+                className="text-2xl font-black text-text-primary"
               >
                 {partner}
               </span>
@@ -51,17 +50,17 @@ export default async function HomePage() {
       <HomeServices />
 
       {/* Highlights Section */}
-      <section className="relative bg-gray-900 dark:bg-[#0a0a0a] py-24 text-white transition-colors overflow-hidden">
+      <section className="relative bg-bg-secondary py-24 text-text-primary transition-colors overflow-hidden">
         {/* Gradient Background */}
         <div className="absolute inset-0 gradient-mesh opacity-50"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-16">
             <div>
-              <h2 className="text-3xl md:text-5xl font-bold mb-4 text-white">
+              <h2 className="text-3xl md:text-5xl font-bold mb-4 text-text-primary">
                 Recent Highlights
               </h2>
-              <p className="text-gray-400 dark:text-gray-500 text-lg">
+              <p className="text-text-muted text-lg">
                 Glimpses into the unforgettable events we've curated.
               </p>
             </div>
@@ -96,7 +95,7 @@ export default async function HomePage() {
               />
             </div>
             <div className="absolute -bottom-8 -right-8 bg-gradient-to-br from-amber-500 to-amber-600 p-10 rounded-[40px] shadow-2xl hidden md:block glow-amber">
-              <div className="text-white">
+              <div className="text-bg-primary">
                 <div className="text-5xl font-bold mb-1">15+</div>
                 <div className="text-sm font-medium opacity-80">
                   Years of Culinary Excellence
@@ -109,10 +108,10 @@ export default async function HomePage() {
             <div className="inline-block bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400 px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider border border-amber-200 dark:border-amber-500/20">
               About Us
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight">
+            <h2 className="text-4xl md:text-5xl font-bold text-text-primary leading-tight">
               A Passion for Food and Unforgettable Moments
             </h2>
-            <p className="text-gray-600 dark:text-gray-400 text-lg leading-relaxed">
+            <p className="text-text-secondary text-lg leading-relaxed">
               At Testful Affaire, we believe that every event is an opportunity
               to create a masterpiece. Founded by culinary enthusiasts, our
               mission is to deliver exceptional taste with impeccable service.
@@ -123,10 +122,10 @@ export default async function HomePage() {
                   <Star className="h-6 w-6 text-amber-600 dark:text-amber-400" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-gray-900 dark:text-white mb-1">
+                  <h4 className="font-bold text-text-primary mb-1">
                     Top Rated
                   </h4>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                  <p className="text-sm text-text-muted">
                     Consistently voted best caterer in the region.
                   </p>
                 </div>
@@ -136,10 +135,10 @@ export default async function HomePage() {
                   <Users className="h-6 w-6 text-amber-600 dark:text-amber-400" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-gray-900 dark:text-white mb-1">
+                  <h4 className="font-bold text-text-primary mb-1">
                     Expert Team
                   </h4>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                  <p className="text-sm text-text-muted">
                     Over 50+ trained staff for seamless service.
                   </p>
                 </div>
@@ -147,7 +146,7 @@ export default async function HomePage() {
             </div>
             <Link
               href="/gallery"
-              className="inline-flex items-center gap-2 font-bold text-gray-900 dark:text-white group hover-glow"
+              className="inline-flex items-center gap-2 font-bold text-text-primary group hover-glow"
             >
               Explore Our Story
               <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />

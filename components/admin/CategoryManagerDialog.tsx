@@ -135,16 +135,16 @@ export default function CategoryManagerDialog({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] p-8 md:p-10 max-w-2xl w-full border border-gray-100 dark:border-gray-800 shadow-2xl max-h-[90vh] overflow-y-auto">
+      <div className="bg-bg-primary rounded-[2.5rem] p-8 md:p-10 max-w-2xl w-full border border-border-color shadow-2xl max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h2 className="text-2xl font-bold text-text-primary">
             Manage Categories
           </h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-colors"
+            className="p-2 hover:bg-bg-secondary dark:hover:bg-gray-800 rounded-xl transition-colors"
           >
-            <X className="h-6 w-6 text-gray-500" />
+            <X className="h-6 w-6 text-text-muted" />
           </button>
         </div>
 
@@ -155,8 +155,8 @@ export default function CategoryManagerDialog({
         )}
 
         {/* Add New Category */}
-        <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-800 rounded-2xl">
-          <label className="text-sm font-bold text-gray-700 dark:text-gray-300 mb-2 block">
+        <div className="mb-6 p-4 bg-bg-secondary rounded-2xl">
+          <label className="text-sm font-bold text-text-secondary mb-2 block">
             Add New Category
           </label>
           <div className="flex gap-2">
@@ -167,7 +167,7 @@ export default function CategoryManagerDialog({
               onKeyDown={(e) => e.key === "Enter" && handleAddCategory()}
               placeholder="Enter category name..."
               disabled={isLoading}
-              className="flex-1 px-4 py-3 rounded-xl bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 focus:border-amber-500 focus:outline-none transition-all text-gray-900 dark:text-white disabled:opacity-50"
+              className="flex-1 px-4 py-3 rounded-xl bg-bg-primary border border-border-color focus:border-amber-500 focus:outline-none transition-all text-text-primary disabled:opacity-50"
             />
             <button
               onClick={handleAddCategory}
@@ -182,14 +182,14 @@ export default function CategoryManagerDialog({
 
         {/* Category List */}
         <div className="space-y-2">
-          <h3 className="text-sm font-bold text-gray-700 dark:text-gray-300 mb-3">
+          <h3 className="text-sm font-bold text-text-secondary mb-3">
             Existing Categories ({categories.length})
           </h3>
           {categories.length > 0 ? (
             categories.map((category) => (
               <div
                 key={category.id}
-                className="flex items-center gap-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-2xl"
+                className="flex items-center gap-2 p-4 bg-bg-secondary rounded-2xl"
               >
                 {editingId === category.id ? (
                   <>
@@ -202,7 +202,7 @@ export default function CategoryManagerDialog({
                           handleUpdateCategory(category.id);
                         if (e.key === "Escape") handleCancelEdit();
                       }}
-                      className="flex-1 px-4 py-2 rounded-xl bg-white dark:bg-gray-700 border border-amber-500 focus:outline-none text-gray-900 dark:text-white"
+                      className="flex-1 px-4 py-2 rounded-xl bg-bg-primary border border-amber-500 focus:outline-none text-text-primary"
                       disabled={isLoading}
                       autoFocus
                     />
@@ -220,7 +220,7 @@ export default function CategoryManagerDialog({
                     <button
                       onClick={handleCancelEdit}
                       disabled={isLoading}
-                      className="px-4 py-2 rounded-xl font-bold bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-400 dark:hover:bg-gray-500 transition-all disabled:opacity-50"
+                      className="px-4 py-2 rounded-xl font-bold bg-bg-tertiary text-text-secondary hover:bg-bg-secondary transition-all disabled:opacity-50"
                     >
                       Cancel
                     </button>
@@ -228,10 +228,10 @@ export default function CategoryManagerDialog({
                 ) : (
                   <>
                     <div className="flex-1">
-                      <p className="font-bold text-gray-900 dark:text-white">
+                      <p className="font-bold text-text-primary">
                         {category.name}
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                      <p className="text-xs text-text-muted">
                         {category._count?.items || 0} items
                       </p>
                     </div>
@@ -254,16 +254,16 @@ export default function CategoryManagerDialog({
               </div>
             ))
           ) : (
-            <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-8">
+            <p className="text-sm text-text-muted text-center py-8">
               No categories yet. Add one above!
             </p>
           )}
         </div>
 
-        <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800">
+        <div className="mt-8 pt-6 border-t border-border-color dark:border-gray-800">
           <button
             onClick={onClose}
-            className="w-full px-6 py-4 rounded-2xl font-bold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
+            className="w-full px-6 py-4 rounded-2xl font-bold bg-bg-secondary text-text-secondary hover:bg-bg-tertiary transition-all"
           >
             Done
           </button>

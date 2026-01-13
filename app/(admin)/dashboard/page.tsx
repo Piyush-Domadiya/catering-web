@@ -85,10 +85,10 @@ export default function DashboardPage() {
   if (!stats) {
     return (
       <div className="text-center py-20">
-        <h3 className="text-gray-900 dark:text-white font-bold mb-1">
+        <h3 className="text-text-primary font-bold mb-1">
           Failed to load dashboard
         </h3>
-        <p className="text-gray-500 dark:text-gray-400">
+        <p className="text-text-secondary">
           Please refresh the page to try again.
         </p>
       </div>
@@ -131,24 +131,22 @@ export default function DashboardPage() {
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+          <h1 className="text-3xl font-bold text-text-primary">
             Business Intelligence
           </h1>
-          <p className="text-gray-500 dark:text-gray-400 font-medium">
+          <p className="text-text-secondary font-medium">
             Overview of your catering business performance.
           </p>
         </div>
-        <div className="flex items-center gap-3 bg-white dark:bg-slate-950 p-2 rounded-2xl border border-gray-100 dark:border-slate-800 shadow-sm">
-          <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center text-amber-600">
+        <div className="flex items-center gap-3 bg-bg-primary/50 backdrop-blur-md p-2 rounded-2xl border border-border-color shadow-sm">
+          <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500">
             <Calendar className="h-5 w-5" />
           </div>
           <div className="pr-4">
-            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+            <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">
               Current Period
             </p>
-            <p className="text-sm font-bold text-gray-900 dark:text-gray-100">
-              All Time
-            </p>
+            <p className="text-sm font-bold text-text-primary">All Time</p>
           </div>
         </div>
       </div>
@@ -171,10 +169,10 @@ export default function DashboardPage() {
                   </span>
                 )}
               </div>
-              <h3 className="text-gray-500 dark:text-gray-400 text-sm font-medium mb-1">
+              <h3 className="text-text-secondary text-sm font-medium mb-1">
                 {stat.name}
               </h3>
-              <p className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+              <p className="text-3xl font-bold text-text-primary">
                 {stat.value}
               </p>
             </div>
@@ -187,7 +185,7 @@ export default function DashboardPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="bg-white dark:bg-slate-950 p-6 rounded-[2rem] border border-gray-100 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all group h-full cursor-pointer"
+                  className="bg-bg-primary p-6 rounded-[2rem] border border-border-color shadow-sm hover:shadow-xl transition-all group h-full cursor-pointer"
                 >
                   {Content}
                 </motion.div>
@@ -201,7 +199,7 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="bg-white dark:bg-slate-950 p-6 rounded-[2rem] border border-gray-100 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all group h-full"
+              className="bg-bg-primary p-6 rounded-[2rem] border border-border-color shadow-sm hover:shadow-xl transition-all group h-full"
             >
               {Content}
             </motion.div>
@@ -211,8 +209,8 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Top Event Types */}
-        <div className="lg:col-span-1 bg-white dark:bg-slate-950 rounded-[2.5rem] p-8 border border-gray-100 dark:border-slate-800 shadow-sm">
-          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-8 flex items-center gap-2">
+        <div className="lg:col-span-1 bg-bg-primary rounded-[2.5rem] p-8 border border-border-color shadow-sm">
+          <h3 className="text-xl font-bold text-text-primary mb-8 flex items-center gap-2">
             <Briefcase className="h-5 w-5 text-amber-500" />
             Top Event Types
           </h3>
@@ -220,45 +218,43 @@ export default function DashboardPage() {
             {stats.topEventTypes.length > 0 ? (
               stats.topEventTypes.map((eventType) => (
                 <div key={eventType.type} className="flex gap-4 items-center">
-                  <div className="w-10 h-10 rounded-xl bg-gray-50 dark:bg-slate-900 flex items-center justify-center text-gray-400">
+                  <div className="w-10 h-10 rounded-xl bg-bg-secondary flex items-center justify-center text-text-muted">
                     <Star className="h-4 w-4" />
                   </div>
                   <div className="flex-grow">
-                    <p className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-0.5">
+                    <p className="text-sm font-bold text-text-primary mb-0.5">
                       {eventType.type}
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-text-secondary">
                       {eventType.count} events
                     </p>
                   </div>
                 </div>
               ))
             ) : (
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                No events yet
-              </p>
+              <p className="text-sm text-[var(--text-muted)]">No events yet</p>
             )}
           </div>
         </div>
 
         {/* Recent Events */}
-        <div className="lg:col-span-2 bg-white dark:bg-slate-950 rounded-[2.5rem] p-8 border border-gray-100 dark:border-slate-800 shadow-sm">
+        <div className="lg:col-span-2 bg-bg-primary rounded-[2.5rem] p-8 border border-border-color shadow-sm">
           <div className="flex justify-between items-center mb-8">
-            <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+            <h3 className="text-xl font-bold text-text-primary">
               Recent Events
             </h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
-                <tr className="text-gray-400 text-[10px] font-bold border-b border-gray-50 dark:border-slate-800 tracking-widest">
+                <tr className="text-text-muted text-[10px] font-bold border-b border-border-color tracking-widest">
                   <th className="pb-4 uppercase">Event</th>
                   <th className="pb-4 uppercase">Customer</th>
                   <th className="pb-4 uppercase">Date</th>
                   <th className="pb-4 uppercase">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-50 dark:divide-slate-800">
+              <tbody className="divide-y divide-border-color">
                 {stats.recentEvents.length > 0 ? (
                   stats.recentEvents.map((event) => (
                     <tr
@@ -267,27 +263,27 @@ export default function DashboardPage() {
                         setSelectedEvent(event);
                         setIsDialogOpen(true);
                       }}
-                      className="group hover:bg-gray-50 dark:hover:bg-slate-900 transition-colors cursor-pointer"
+                      className="group hover:bg-bg-secondary transition-colors cursor-pointer"
                     >
                       <td className="py-5">
-                        <p className="font-bold text-gray-900 dark:text-gray-100">
+                        <p className="font-bold text-text-primary">
                           {event.name}
                         </p>
-                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">
+                        <p className="text-[10px] text-text-muted font-bold uppercase tracking-tight">
                           {event.type}
                         </p>
                       </td>
                       <td className="py-5">
-                        <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                        <p className="text-sm text-text-secondary font-medium">
                           {event.customer}
                         </p>
                       </td>
                       <td className="py-5">
-                        <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                        <p className="text-sm text-text-secondary font-medium">
                           {new Date(event.date).toLocaleDateString()}
                         </p>
                         {event.time && (
-                          <p className="text-xs text-gray-500 font-medium mt-0.5">
+                          <p className="text-xs text-text-muted font-medium mt-0.5">
                             {formatTime(event.time)}
                           </p>
                         )}
@@ -299,7 +295,7 @@ export default function DashboardPage() {
                               ? "bg-amber-50 dark:bg-amber-500/10 text-amber-600"
                               : event.status === "COMPLETED"
                               ? "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600"
-                              : "bg-gray-100 dark:bg-gray-800 text-gray-500"
+                              : "bg-[var(--bg-secondary)] text-[var(--text-muted)]"
                           }`}
                         >
                           {event.status}
@@ -310,7 +306,7 @@ export default function DashboardPage() {
                 ) : (
                   <tr>
                     <td colSpan={4} className="py-8 text-center">
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                      <p className="text-sm text-[var(--text-muted)]">
                         No recent events
                       </p>
                     </td>

@@ -108,10 +108,10 @@ export default function EventsPage() {
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-3xl font-bold text-text-primary">
             Event Management
           </h1>
-          <p className="text-gray-500 dark:text-gray-400">
+          <p className="text-text-secondary">
             Track and organize all your upcoming and past events.
           </p>
         </div>
@@ -124,16 +124,16 @@ export default function EventsPage() {
         </button>
       </div>
 
-      <div className="bg-white dark:bg-slate-950 rounded-[2.5rem] border border-gray-100 dark:border-slate-800 shadow-sm overflow-hidden">
-        <div className="p-8 border-b border-gray-50 dark:border-slate-800 flex flex-col md:flex-row gap-4 items-center justify-between">
+      <div className="bg-bg-primary rounded-[2.5rem] border border-border-color shadow-sm overflow-hidden">
+        <div className="p-8 border-b border-border-color flex flex-col md:flex-row gap-4 items-center justify-between">
           <div className="relative w-full md:w-96">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted" />
             <input
               type="text"
               placeholder="Search events, customers..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 rounded-xl bg-gray-50 dark:bg-slate-900 border border-transparent focus:bg-white dark:focus:bg-slate-800 focus:border-amber-500 focus:outline-none transition-all text-gray-900 dark:text-white"
+              className="w-full pl-12 pr-4 py-3 rounded-xl bg-bg-secondary border border-transparent focus:bg-bg-primary focus:border-amber-500 focus:outline-none transition-all text-text-primary"
             />
           </div>
         </div>
@@ -143,11 +143,11 @@ export default function EventsPage() {
             <Loader2 className="h-8 w-8 animate-spin text-amber-500" />
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 divide-x divide-y divide-gray-50 dark:divide-slate-800 border-t border-gray-50 dark:border-slate-800">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 divide-x divide-y divide-border-color border-t border-border-color">
             {filteredEvents.map((event) => (
               <div
                 key={event.id}
-                className="p-8 hover:bg-gray-50 dark:hover:bg-slate-900 transition-colors group relative"
+                className="p-8 hover:bg-bg-secondary transition-colors group relative"
               >
                 <div className="flex justify-between items-start mb-6">
                   <div
@@ -177,15 +177,15 @@ export default function EventsPage() {
                   </div>
                 </div>
 
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 truncate group-hover:text-amber-600 transition-colors">
+                <h3 className="text-xl font-bold text-text-primary mb-2 truncate group-hover:text-amber-600 transition-colors">
                   {event.name}
                 </h3>
-                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">
+                <p className="text-xs font-bold text-text-muted uppercase tracking-widest mb-6">
                   {event.type}
                 </p>
 
                 <div className="space-y-4">
-                  <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400 font-medium">
+                  <div className="flex items-center gap-3 text-sm text-text-secondary font-medium">
                     <Calendar className="h-4 w-4 text-amber-500" />
                     {new Date(event.date).toLocaleDateString("en-US", {
                       year: "numeric",
@@ -193,18 +193,18 @@ export default function EventsPage() {
                       day: "numeric",
                     })}
                   </div>
-                  <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400 font-medium">
+                  <div className="flex items-center gap-3 text-sm text-text-secondary font-medium">
                     <MapPin className="h-4 w-4 text-amber-500" />
                     <span className="truncate">{event.location}</span>
                   </div>
-                  <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400 font-medium">
+                  <div className="flex items-center gap-3 text-sm text-text-secondary font-medium">
                     <User className="h-4 w-4 text-amber-500" />
                     {event.customer.name}
                   </div>
                 </div>
 
-                <div className="mt-8 pt-6 border-t border-gray-50 dark:border-slate-800 flex items-center justify-between">
-                  <div className="text-xs text-gray-500 dark:text-gray-400 font-bold">
+                <div className="mt-8 pt-6 border-t border-border-color flex items-center justify-between">
+                  <div className="text-xs text-text-muted font-bold">
                     {event._count?.staff || 0} Staff Assigned
                   </div>
                   <button
@@ -223,10 +223,10 @@ export default function EventsPage() {
 
         {!isLoading && filteredEvents.length === 0 && (
           <div className="py-20 text-center">
-            <h3 className="text-gray-900 dark:text-white font-bold mb-1">
+            <h3 className="text-text-primary font-bold mb-1">
               No events found
             </h3>
-            <p className="text-gray-500 dark:text-gray-400">
+            <p className="text-text-muted">
               {searchQuery
                 ? "Try a different search or filter."
                 : "Plan your first event to get started."}

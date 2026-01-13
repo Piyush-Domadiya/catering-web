@@ -119,25 +119,25 @@ export default function HighlightsClient() {
 
   return (
     <div className="space-y-8">
-      <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-gray-100 dark:border-slate-800 shadow-sm">
-        <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-4">
+      <div className="bg-bg-primary p-6 rounded-2xl border border-border-color shadow-sm">
+        <h3 className="text-lg font-bold text-text-primary mb-4">
           Add New Highlight
         </h3>
         <form onSubmit={handleCreate} className="flex flex-col gap-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-text-secondary mb-1">
                 Upload Image
               </label>
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleFileChange}
-                className="w-full p-2.5 rounded-xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-amber-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100 dark:file:bg-amber-500/10 dark:file:text-amber-500"
+                className="w-full p-2.5 rounded-xl border border-border-color bg-bg-secondary focus:outline-none focus:ring-2 focus:ring-amber-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-amber-50 file:text-amber-700 hover:file:bg-amber-100 dark:file:bg-amber-500/10 dark:file:text-amber-500"
                 required
               />
               {previewUrl && (
-                <div className="mt-2 relative w-full h-32 rounded-lg overflow-hidden border border-gray-200 dark:border-slate-700">
+                <div className="mt-2 relative w-full h-32 rounded-lg overflow-hidden border border-border-color">
                   <Image
                     src={previewUrl}
                     alt="Preview"
@@ -148,7 +148,7 @@ export default function HighlightsClient() {
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-text-secondary mb-1">
                 Title (Optional)
               </label>
               <input
@@ -156,7 +156,7 @@ export default function HighlightsClient() {
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
                 placeholder="Wedding Celebration"
-                className="w-full p-2.5 rounded-xl border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                className="w-full p-2.5 rounded-xl border border-border-color bg-bg-secondary focus:outline-none focus:ring-2 focus:ring-amber-500 text-text-primary"
               />
             </div>
           </div>
@@ -179,7 +179,7 @@ export default function HighlightsClient() {
         {highlights.map((highlight) => (
           <div
             key={highlight.id}
-            className="group relative aspect-video rounded-2xl overflow-hidden bg-gray-100 dark:bg-slate-800 border border-gray-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-all"
+            className="group relative aspect-video rounded-2xl overflow-hidden bg-bg-secondary border border-border-color shadow-sm hover:shadow-md transition-all"
           >
             <Image
               src={highlight.imageUrl}
@@ -207,7 +207,7 @@ export default function HighlightsClient() {
       </div>
 
       {highlights.length === 0 && (
-        <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+        <div className="text-center py-12 text-text-muted">
           <ImageIcon className="w-12 h-12 mx-auto mb-3 opacity-20" />
           <p>No highlights added yet.</p>
         </div>

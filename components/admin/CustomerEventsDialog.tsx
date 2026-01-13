@@ -59,7 +59,7 @@ export default function CustomerEventsDialog({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] p-8 max-w-2xl w-full border border-gray-100 dark:border-slate-800 shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+      <div className="bg-bg-primary rounded-[2.5rem] p-8 max-w-2xl w-full border border-border-color shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
         <div className="flex justify-between items-center mb-6 shrink-0">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">

@@ -66,16 +66,16 @@ export default function StaffDialog({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] p-8 md:p-10 max-w-2xl w-full border border-gray-100 dark:border-gray-800 shadow-2xl">
+      <div className="bg-bg-primary rounded-[2.5rem] p-8 md:p-10 max-w-2xl w-full border border-border-color shadow-2xl">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h2 className="text-2xl font-bold text-text-primary">
             {isEditing ? "Edit Staff Member" : "Add New Staff Member"}
           </h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-colors"
+            className="p-2 hover:bg-bg-secondary dark:hover:bg-gray-800 rounded-xl transition-colors"
           >
-            <X className="h-6 w-6 text-gray-500" />
+            <X className="h-6 w-6 text-text-muted" />
           </button>
         </div>
 
@@ -88,7 +88,7 @@ export default function StaffDialog({
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">
+              <label className="text-sm font-bold text-text-secondary ml-1">
                 Full Name *
               </label>
               <input
@@ -98,12 +98,12 @@ export default function StaffDialog({
                 placeholder="Chef Gordon"
                 required
                 disabled={isLoading}
-                className="w-full px-5 py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 border border-transparent focus:bg-white dark:focus:bg-gray-700 focus:border-amber-500 focus:outline-none transition-all font-medium text-gray-900 dark:text-white disabled:opacity-50"
+                className="w-full px-5 py-4 rounded-2xl bg-bg-secondary border border-border-color focus:bg-bg-primary focus:border-amber-500 focus:outline-none transition-all font-medium text-text-primary disabled:opacity-50"
               />
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">
+              <label className="text-sm font-bold text-text-secondary ml-1">
                 Role *
               </label>
               <select
@@ -111,7 +111,7 @@ export default function StaffDialog({
                 defaultValue={staff?.role || ""}
                 required
                 disabled={isLoading}
-                className="w-full px-5 py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 border border-transparent focus:bg-white dark:focus:bg-gray-700 focus:border-amber-500 focus:outline-none transition-all font-medium text-gray-900 dark:text-white disabled:opacity-50"
+                className="w-full px-5 py-4 rounded-2xl bg-bg-secondary border border-border-color focus:bg-bg-primary focus:border-amber-500 focus:outline-none transition-all font-medium text-text-primary disabled:opacity-50"
               >
                 <option value="">Select role...</option>
                 <option value="Chef">Chef</option>
@@ -124,7 +124,7 @@ export default function StaffDialog({
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">
+            <label className="text-sm font-bold text-text-secondary ml-1">
               Phone Number *
             </label>
             <input
@@ -134,7 +134,7 @@ export default function StaffDialog({
               placeholder="+1 234 567 890"
               required
               disabled={isLoading}
-              className="w-full px-5 py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 border border-transparent focus:bg-white dark:focus:bg-gray-700 focus:border-amber-500 focus:outline-none transition-all font-medium text-gray-900 dark:text-white disabled:opacity-50"
+              className="w-full px-5 py-4 rounded-2xl bg-bg-secondary dark:bg-gray-800 border border-transparent focus:bg-bg-primary dark:focus:bg-gray-700 focus:border-amber-500 focus:outline-none transition-all font-medium text-text-primary dark:text-white disabled:opacity-50"
             />
           </div>
 
@@ -143,7 +143,7 @@ export default function StaffDialog({
               type="button"
               onClick={onClose}
               disabled={isLoading}
-              className="flex-1 px-6 py-4 rounded-2xl font-bold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all disabled:opacity-50"
+              className="flex-1 px-6 py-4 rounded-2xl font-bold bg-bg-secondary text-text-secondary hover:bg-bg-tertiary transition-all disabled:opacity-50"
             >
               Cancel
             </button>

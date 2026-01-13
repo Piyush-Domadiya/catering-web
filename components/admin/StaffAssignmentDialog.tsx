@@ -116,21 +116,19 @@ export default function StaffAssignmentDialog({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] p-8 md:p-10 max-w-3xl w-full border border-gray-100 dark:border-gray-800 shadow-2xl max-h-[90vh] overflow-y-auto">
+      <div className="bg-bg-primary rounded-[2.5rem] p-8 md:p-10 max-w-3xl w-full border border-border-color shadow-2xl max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-2xl font-bold text-text-primary">
               Manage Staff
             </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-              {eventName}
-            </p>
+            <p className="text-sm text-text-secondary mt-1">{eventName}</p>
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-colors"
+            className="p-2 hover:bg-bg-secondary dark:hover:bg-gray-800 rounded-xl transition-colors"
           >
-            <X className="h-6 w-6 text-gray-500" />
+            <X className="h-6 w-6 text-text-muted" />
           </button>
         </div>
 
@@ -148,7 +146,7 @@ export default function StaffAssignmentDialog({
           <div className="space-y-8">
             {/* Assigned Staff */}
             <div>
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
+              <h3 className="text-lg font-bold text-text-primary mb-4">
                 Assigned Staff ({assignedStaff.length})
               </h3>
               {assignedStaff.length > 0 ? (
@@ -159,7 +157,7 @@ export default function StaffAssignmentDialog({
                       className="flex items-center justify-between p-4 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-100 dark:border-emerald-500/20 rounded-2xl"
                     >
                       <div>
-                        <p className="font-bold text-gray-900 dark:text-white">
+                        <p className="font-bold text-text-primary">
                           {assignment.staff.name}
                         </p>
                         <p className="text-xs text-emerald-600 dark:text-emerald-400 font-bold uppercase tracking-widest">
@@ -176,7 +174,7 @@ export default function StaffAssignmentDialog({
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-gray-500 dark:text-gray-400 py-4">
+                <p className="text-sm text-text-secondary py-4">
                   No staff assigned yet
                 </p>
               )}
@@ -184,7 +182,7 @@ export default function StaffAssignmentDialog({
 
             {/* Available Staff */}
             <div>
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
+              <h3 className="text-lg font-bold text-text-primary mb-4">
                 Available Staff ({availableStaff.length})
               </h3>
               {availableStaff.length > 0 ? (
@@ -192,13 +190,13 @@ export default function StaffAssignmentDialog({
                   {availableStaff.map((staff) => (
                     <div
                       key={staff.id}
-                      className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl"
+                      className="flex items-center justify-between p-4 bg-bg-secondary border border-border-color rounded-2xl"
                     >
                       <div>
-                        <p className="font-bold text-gray-900 dark:text-white">
+                        <p className="font-bold text-text-primary">
                           {staff.name}
                         </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 font-bold uppercase tracking-widest">
+                        <p className="text-xs text-text-muted font-bold uppercase tracking-widest">
                           {staff.role}
                         </p>
                       </div>
@@ -212,7 +210,7 @@ export default function StaffAssignmentDialog({
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-gray-500 dark:text-gray-400 py-4">
+                <p className="text-sm text-text-secondary py-4">
                   All staff members are assigned
                 </p>
               )}
@@ -223,7 +221,7 @@ export default function StaffAssignmentDialog({
         <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800">
           <button
             onClick={onClose}
-            className="w-full px-6 py-4 rounded-2xl font-bold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
+            className="w-full px-6 py-4 rounded-2xl font-bold bg-bg-secondary text-text-secondary hover:bg-bg-tertiary transition-all"
           >
             Done
           </button>

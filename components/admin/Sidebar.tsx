@@ -33,13 +33,13 @@ const menuItems = [
   { name: "Backup & Data", icon: Database, href: "/backup" },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ onClose }: { onClose?: () => void }) {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
     <div
-      className={`fixed left-0 top-0 h-screen bg-gray-900 text-gray-400 transition-all duration-300 z-50 ${
+      className={`fixed left-0 top-0 h-screen bg-bg-primary dark:bg-bg-secondary border-r border-border-color text-text-secondary transition-all duration-300 z-50 ${
         isCollapsed ? "w-20" : "w-72"
       }`}
     >
@@ -52,20 +52,29 @@ export default function Sidebar() {
               animate={{ opacity: 1 }}
               className="flex items-center gap-2"
             >
-              <div className="bg-amber-500 p-1.5 rounded-lg">
+              <div className="bg-[var(--accent-amber)] p-1.5 rounded-lg">
                 <Utensils className="h-5 w-5 text-white" />
               </div>
-              <span className="text-white font-bold text-xl truncate">
+              <span className="text-text-primary font-bold text-xl truncate">
                 Testful
               </span>
             </motion.div>
           )}
-          <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-2 hover:bg-gray-800 rounded-xl transition-colors text-gray-400 hover:text-white"
-          >
-            {isCollapsed ? <ChevronRight /> : <ChevronLeft />}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              className="p-2 hover:bg-bg-secondary dark:hover:bg-bg-tertiary rounded-xl transition-colors text-text-muted hover:text-text-primary hidden md:block"
+            >
+              {isCollapsed ? <ChevronRight /> : <ChevronLeft />}
+            </button>
+            {/* Mobile Close Button */}
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-bg-secondary dark:hover:bg-bg-tertiary rounded-xl transition-colors text-text-muted hover:text-text-primary md:hidden"
+            >
+              <ChevronLeft />
+            </button>
+          </div>
         </div>
 
         {/* Navigation */}
@@ -76,10 +85,11 @@ export default function Sidebar() {
               <Link
                 key={item.name}
                 href={item.href}
+                onClick={onClose}
                 className={`flex items-center gap-4 p-3.5 rounded-2xl transition-all group ${
                   isActive
                     ? "bg-amber-500 text-white shadow-lg shadow-amber-500/20"
-                    : "hover:bg-gray-800 hover:text-white"
+                    : "hover:bg-bg-secondary dark:hover:bg-bg-tertiary hover:text-text-primary"
                 }`}
               >
                 <item.icon
@@ -96,11 +106,13 @@ export default function Sidebar() {
         </nav>
 
         {/* Footer */}
-        <div className="pt-4 border-t border-gray-800 space-y-2">
+        <div className="pt-4 border-t border-border-color space-y-2">
           <Link
             href="/settings"
-            className={`flex items-center gap-4 p-3.5 rounded-2xl transition-all hover:bg-gray-800 hover:text-white ${
-              pathname === "/settings" ? "bg-gray-800 text-white" : ""
+            className={`flex items-center gap-4 p-3.5 rounded-2xl transition-all hover:bg-bg-secondary dark:hover:bg-bg-tertiary hover:text-text-primary ${
+              pathname === "/settings"
+                ? "bg-bg-secondary dark:bg-bg-tertiary text-text-primary"
+                : ""
             }`}
           >
             <Settings className="h-5 w-5" />

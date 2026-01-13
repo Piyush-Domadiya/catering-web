@@ -37,7 +37,7 @@ export default function Footer() {
               {[Instagram, Facebook, Twitter].map((Icon, i) => (
                 <div
                   key={i}
-                  className="w-10 h-10 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center hover:bg-amber-500 dark:hover:bg-amber-500 text-gray-400 dark:text-gray-400 hover:text-white transition-all duration-300 cursor-pointer hover:shadow-lg hover:-translate-y-1"
+                  className="w-10 h-10 rounded-full bg-bg-secondary flex items-center justify-center hover:bg-amber-500 dark:hover:bg-amber-500 text-text-muted hover:text-white transition-all duration-300 cursor-pointer hover:shadow-lg hover:-translate-y-1"
                 >
                   <Icon className="h-5 w-5" />
                 </div>

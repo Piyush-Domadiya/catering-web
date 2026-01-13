@@ -138,12 +138,12 @@ export function MenuForm({
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <label className="block text-sm font-medium text-text-secondary mb-1">
           Item Name
         </label>
         <input
           {...register("name")}
-          className="w-full px-4 py-2 border border-gray-200 dark:border-slate-700 rounded-xl bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all"
+          className="w-full px-4 py-2 border border-border-color rounded-xl bg-bg-secondary text-text-primary focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all placeholder:text-text-muted"
           placeholder="e.g. Truffle Arancini"
         />
         {errors.name && (
@@ -152,7 +152,7 @@ export function MenuForm({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <label className="block text-sm font-medium text-text-secondary mb-1">
           Category
         </label>
         {isCreatingCategory ? (
@@ -161,7 +161,7 @@ export function MenuForm({
               value={newCategoryName}
               onChange={(e) => setNewCategoryName(e.target.value)}
               placeholder="Enter new category name"
-              className="w-full px-4 py-2 border border-gray-200 dark:border-slate-700 rounded-xl bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all"
+              className="w-full px-4 py-2 border border-border-color rounded-xl bg-bg-secondary text-text-primary focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all placeholder:text-text-muted"
             />
             <button
               type="button"
@@ -194,14 +194,14 @@ export function MenuForm({
                 setNewCategoryName("");
                 setValue("categoryId", "");
               }}
-              className="bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 px-4 py-2 rounded-xl font-medium"
+              className="bg-bg-tertiary text-text-secondary px-4 py-2 rounded-xl font-medium"
             >
               Cancel
             </button>
           </div>
         ) : (
           <select
-            className="w-full px-4 py-2 border border-gray-200 dark:border-slate-700 rounded-xl bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all"
+            className="w-full px-4 py-2 border border-border-color rounded-xl bg-bg-secondary text-text-primary focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all"
             {...register("categoryId", {
               onChange: (e: React.ChangeEvent<HTMLSelectElement>) => {
                 if (e.target.value === "__NEW__") {
@@ -231,21 +231,21 @@ export function MenuForm({
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-text-secondary mb-1">
             Price (₹)
           </label>
           <input
             type="number"
             step="0.01"
             {...register("price")}
-            className="w-full px-4 py-2 border border-gray-200 dark:border-slate-700 rounded-xl bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all"
+            className="w-full px-4 py-2 border border-border-color rounded-xl bg-bg-secondary text-text-primary focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all"
           />
           {errors.price && (
             <p className="text-red-500 text-sm mt-1">{errors.price.message}</p>
           )}
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          <label className="block text-sm font-medium text-text-secondary mb-1">
             Status
           </label>
           <div className="flex items-center h-full">
@@ -255,7 +255,7 @@ export function MenuForm({
                 {...register("available")}
                 className="w-5 h-5 text-amber-500 rounded focus:ring-amber-500 border-gray-300"
               />
-              <span className="text-sm text-gray-600 dark:text-gray-400">
+              <span className="text-sm text-text-secondary dark:text-text-muted">
                 Available
               </span>
             </label>
@@ -264,19 +264,19 @@ export function MenuForm({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <label className="block text-sm font-medium text-text-secondary mb-1">
           Description
         </label>
         <textarea
           {...register("description")}
           rows={3}
-          className="w-full px-4 py-2 border border-gray-200 dark:border-slate-700 rounded-xl bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all"
+          className="w-full px-4 py-2 border border-border-color rounded-xl bg-bg-secondary text-text-primary focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all placeholder:text-text-muted"
           placeholder="Brief description of the dish..."
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        <label className="block text-sm font-medium text-text-secondary mb-1">
           Image
         </label>
 
@@ -284,15 +284,13 @@ export function MenuForm({
           {/* File Upload UI */}
           <div className="flex items-start gap-4">
             <div className="flex-1">
-              <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 dark:border-slate-700 border-dashed rounded-xl cursor-pointer bg-gray-50 dark:bg-slate-800 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors">
+              <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-border-color border-dashed rounded-xl cursor-pointer bg-bg-secondary hover:bg-bg-tertiary transition-colors">
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                  <Upload className="w-8 h-8 mb-2 text-gray-500 dark:text-gray-400" />
-                  <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                  <Upload className="w-8 h-8 mb-2 text-text-muted" />
+                  <p className="mb-2 text-sm text-text-muted">
                     <span className="font-semibold">Click to upload</span>
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                    PNG, JPG or WEBP
-                  </p>
+                  <p className="text-xs text-text-muted">PNG, JPG or WEBP</p>
                 </div>
                 <input
                   type="file"
@@ -304,7 +302,7 @@ export function MenuForm({
             </div>
 
             {/* Preview */}
-            <div className="relative w-32 h-32 rounded-xl overflow-hidden border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800 flex items-center justify-center shrink-0">
+            <div className="relative w-32 h-32 rounded-xl overflow-hidden border border-border-color bg-bg-secondary flex items-center justify-center shrink-0">
               {previewUrl ? (
                 <>
                   <Image
@@ -326,7 +324,7 @@ export function MenuForm({
                   </button>
                 </>
               ) : (
-                <ImageIcon className="w-8 h-8 text-gray-400" />
+                <ImageIcon className="w-8 h-8 text-text-muted" />
               )}
             </div>
           </div>
@@ -336,10 +334,10 @@ export function MenuForm({
               className="absolute inset-0 flex items-center"
               aria-hidden="true"
             >
-              <div className="w-full border-t border-gray-200 dark:border-slate-700"></div>
+              <div className="w-full border-t border-border-color"></div>
             </div>
             <div className="relative flex justify-center text-sm font-medium leading-6">
-              <span className="bg-white dark:bg-slate-900 px-3 text-gray-900 dark:text-white">
+              <span className="bg-bg-primary px-3 text-text-primary">
                 Or use URL
               </span>
             </div>
@@ -354,7 +352,7 @@ export function MenuForm({
                 }
               },
             })}
-            className="w-full px-4 py-2 border border-gray-200 dark:border-slate-700 rounded-xl bg-gray-50 dark:bg-slate-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all"
+            className="w-full px-4 py-2 border border-border-color rounded-xl bg-bg-secondary text-text-primary focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all"
             placeholder="https://..."
           />
         </div>

@@ -69,16 +69,16 @@ export default function PackageDialog({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] p-8 md:p-10 max-w-2xl w-full border border-gray-100 dark:border-gray-800 shadow-2xl">
+      <div className="bg-bg-primary rounded-[2.5rem] p-8 md:p-10 max-w-2xl w-full border border-border-color shadow-2xl">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h2 className="text-2xl font-bold text-text-primary">
             {isEditing ? "Edit Package" : "Create New Package"}
           </h2>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-colors"
+            className="p-2 hover:bg-bg-secondary rounded-xl transition-colors"
           >
-            <X className="h-6 w-6 text-gray-500" />
+            <X className="h-6 w-6 text-text-muted" />
           </button>
         </div>
 
@@ -90,19 +90,19 @@ export default function PackageDialog({
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <label className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">
+            <label className="text-sm font-bold text-text-secondary ml-1">
               Package Name *
             </label>
             <input
               name="name"
               defaultValue={pkg?.name}
               required
-              className="w-full px-5 py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 border border-transparent focus:bg-white dark:focus:bg-gray-700 focus:border-amber-500 focus:outline-none transition-all font-medium text-gray-900 dark:text-white"
+              className="w-full px-5 py-4 rounded-2xl bg-bg-secondary border border-border-color focus:bg-bg-primary focus:border-amber-500 focus:outline-none transition-all font-medium text-text-primary"
             />
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">
+            <label className="text-sm font-bold text-text-secondary ml-1">
               Description *
             </label>
             <textarea
@@ -110,13 +110,13 @@ export default function PackageDialog({
               defaultValue={pkg?.description}
               required
               rows={3}
-              className="w-full px-5 py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 border border-transparent focus:bg-white dark:focus:bg-gray-700 focus:border-amber-500 focus:outline-none transition-all font-medium text-gray-900 dark:text-white resize-none"
+              className="w-full px-5 py-4 rounded-2xl bg-bg-secondary border border-border-color focus:bg-bg-primary focus:border-amber-500 focus:outline-none transition-all font-medium text-text-primary resize-none"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">
+              <label className="text-sm font-bold text-text-secondary ml-1">
                 Price (₹) *
               </label>
               <input
@@ -125,24 +125,24 @@ export default function PackageDialog({
                 step="0.01"
                 defaultValue={pkg?.price}
                 required
-                className="w-full px-5 py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 border border-transparent focus:bg-white dark:focus:bg-gray-700 focus:border-amber-500 focus:outline-none transition-all font-medium text-gray-900 dark:text-white"
+                className="w-full px-5 py-4 rounded-2xl bg-bg-secondary border border-border-color focus:bg-bg-primary focus:border-amber-500 focus:outline-none transition-all font-medium text-text-primary"
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">
+              <label className="text-sm font-bold text-text-secondary ml-1">
                 Tag (Optional)
               </label>
               <input
                 name="tag"
                 defaultValue={pkg?.tag || ""}
                 placeholder="e.g. Popular"
-                className="w-full px-5 py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 border border-transparent focus:bg-white dark:focus:bg-gray-700 focus:border-amber-500 focus:outline-none transition-all font-medium text-gray-900 dark:text-white"
+                className="w-full px-5 py-4 rounded-2xl bg-bg-secondary border border-border-color focus:bg-bg-primary focus:border-amber-500 focus:outline-none transition-all font-medium text-text-primary"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">
+            <label className="text-sm font-bold text-text-secondary ml-1">
               Features (Comma separated) *
             </label>
             <textarea
@@ -151,7 +151,7 @@ export default function PackageDialog({
               required
               rows={4}
               placeholder="Welcome Drinks, 3-Course Menu, Table Service..."
-              className="w-full px-5 py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 border border-transparent focus:bg-white dark:focus:bg-gray-700 focus:border-amber-500 focus:outline-none transition-all font-medium text-gray-900 dark:text-white resize-none"
+              className="w-full px-5 py-4 rounded-2xl bg-bg-secondary border border-border-color focus:bg-bg-primary focus:border-amber-500 focus:outline-none transition-all font-medium text-text-primary resize-none"
             />
           </div>
 
@@ -159,7 +159,7 @@ export default function PackageDialog({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-6 py-4 rounded-2xl font-bold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all"
+              className="flex-1 px-6 py-4 rounded-2xl font-bold bg-bg-secondary text-text-secondary hover:bg-bg-tertiary transition-all"
             >
               Cancel
             </button>

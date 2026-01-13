@@ -21,7 +21,7 @@ export function GalleryGrid({ events }: { events: any[] }) {
             className="group relative cursor-pointer"
             onClick={() => setSelectedImage(event.image)}
           >
-            <div className="relative h-[450px] rounded-[2.5rem] overflow-hidden shadow-2xl border border-gray-100 dark:border-white/10 dark:bg-gray-900">
+            <div className="relative h-[450px] rounded-[2.5rem] overflow-hidden shadow-2xl border border-border-color">
               <Image
                 src={event.image}
                 alt={event.title}

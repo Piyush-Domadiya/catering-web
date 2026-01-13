@@ -68,13 +68,13 @@ function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-black p-4 transition-colors duration-500">
+    <div className="min-h-screen flex items-center justify-center bg-bg-secondary dark:bg-background p-4 transition-colors duration-500">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-md"
       >
-        <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-2xl p-10 md:p-12 border border-gray-100 dark:border-gray-800 transition-colors">
+        <div className="bg-bg-primary rounded-[2.5rem] shadow-2xl p-10 md:p-12 border border-border-color transition-colors">
           <div className="text-center mb-10">
             <Link
               href="/"
@@ -82,11 +82,11 @@ function LoginForm() {
             >
               <Utensils className="h-8 w-8 text-white" />
             </Link>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            <h1 className="text-3xl font-bold text-text-primary mb-2">
               Welcome Back
             </h1>
-            <p className="text-gray-500 dark:text-gray-400 font-medium">
-              Log in to manage your Testful Affaire
+            <p className="text-text-secondary font-medium">
+              Sign in to your account
             </p>
           </div>
 
@@ -104,17 +104,17 @@ function LoginForm() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <label className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">
+              <label className="text-sm font-bold text-text-secondary ml-1">
                 Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted" />
                 <input
                   name="email"
                   type="email"
                   placeholder="name@company.com"
                   disabled={isLoading}
-                  className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-gray-900 dark:text-white transition-all font-medium disabled:opacity-50"
+                  className="w-full pl-12 pr-4 py-4 rounded-2xl bg-bg-secondary border border-border-color focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-text-primary transition-all font-medium disabled:opacity-50"
                   required
                 />
               </div>
@@ -122,7 +122,7 @@ function LoginForm() {
 
             <div className="space-y-2">
               <div className="flex justify-between items-center px-1">
-                <label className="text-sm font-bold text-gray-700 dark:text-gray-300">
+                <label className="text-sm font-bold text-text-secondary">
                   Password
                 </label>
                 <Link
@@ -133,19 +133,19 @@ function LoginForm() {
                 </Link>
               </div>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted" />
                 <input
                   name="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
                   disabled={isLoading}
-                  className="w-full pl-12 pr-12 py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-gray-900 dark:text-white transition-all font-medium disabled:opacity-50"
+                  className="w-full pl-12 pr-12 py-4 rounded-2xl bg-bg-secondary border border-border-color focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-text-primary transition-all font-medium disabled:opacity-50"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-text-muted hover:text-text-primary transition-colors"
                 >
                   {showPassword ? (
                     <EyeOff className="h-5 w-5" />
@@ -159,7 +159,7 @@ function LoginForm() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-gray-900 dark:bg-amber-500 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-amber-500 dark:hover:bg-amber-600 transition-all active:scale-[0.98] shadow-xl hover:shadow-amber-200/50 disabled:opacity-50 mt-8"
+              className="w-full bg-text-primary text-bg-primary py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-amber-500 hover:text-white transition-all active:scale-[0.98] shadow-xl hover:shadow-amber-200/50 disabled:opacity-50 mt-8"
             >
               {isLoading ? (
                 <>
@@ -175,14 +175,14 @@ function LoginForm() {
             </button>
           </form>
 
-          <div className="mt-10 pt-10 border-t border-gray-50 dark:border-gray-800 text-center transition-colors">
-            <p className="text-gray-500 dark:text-gray-400 font-medium">
+          <div className="mt-10 pt-10 border-t border-border-color text-center transition-colors">
+            <p className="text-text-secondary font-medium">
               Don't have an account?{" "}
               <Link
                 href="/register"
                 className="text-amber-500 font-bold hover:text-amber-600 transition-colors"
               >
-                Register as Staff
+                Register
               </Link>
             </p>
           </div>

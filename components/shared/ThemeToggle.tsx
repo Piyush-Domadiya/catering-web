@@ -13,7 +13,7 @@ export function ThemeToggle() {
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="relative p-2.5 rounded-xl bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-amber-400 hover:text-amber-500 hover:bg-amber-50 dark:hover:bg-white/10 transition-all border border-transparent hover:border-amber-200 dark:hover:border-white/10 hover:shadow-lg hover:glow-amber-sm overflow-hidden"
+      className="relative p-2.5 rounded-xl bg-bg-secondary text-text-secondary hover:text-amber-500 hover:bg-bg-tertiary transition-all border border-transparent hover:border-amber-200 overflow-hidden"
     >
       <div className="relative z-10">
         <Sun className="h-5 w-5 rotate-0 scale-100 transition-all duration-500 dark:-rotate-90 dark:scale-0" />

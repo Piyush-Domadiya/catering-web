@@ -44,7 +44,7 @@ export default async function GalleryPage() {
           </div>
         ) : (
           <div className="text-center py-20">
-            <p className="text-gray-500 dark:text-gray-400 text-lg">
+            <p className="text-text-secondary text-lg">
               No gallery items yet. Check back soon!
             </p>
           </div>

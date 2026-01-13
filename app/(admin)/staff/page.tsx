@@ -70,10 +70,10 @@ export default function StaffPage() {
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+          <h1 className="text-3xl font-bold text-text-primary">
             Staff Management
           </h1>
-          <p className="text-gray-500 dark:text-gray-400">
+          <p className="text-text-secondary">
             Manage your team roles, contact details and assignments.
           </p>
         </div>
@@ -95,7 +95,7 @@ export default function StaffPage() {
           {staff.map((member) => (
             <div
               key={member.id}
-              className="bg-white dark:bg-slate-950 p-8 rounded-[2.5rem] border border-gray-100 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all group"
+              className="bg-bg-primary p-8 rounded-[2.5rem] border border-border-color shadow-sm hover:shadow-xl transition-all group"
             >
               <div className="flex items-start justify-between mb-6">
                 <div className="w-16 h-16 rounded-[1.5rem] bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center text-amber-600">
@@ -119,7 +119,7 @@ export default function StaffPage() {
                 </div>
               </div>
 
-              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
+              <h3 className="text-xl font-bold text-text-primary mb-1">
                 {member.name}
               </h3>
               <p className="text-amber-600 font-bold text-xs uppercase tracking-widest mb-6">
@@ -127,14 +127,14 @@ export default function StaffPage() {
               </p>
 
               <div className="space-y-3 mb-8">
-                <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
-                  <Phone className="h-4 w-4 text-gray-400" />
+                <div className="flex items-center gap-3 text-sm text-text-secondary">
+                  <Phone className="h-4 w-4 text-text-muted" />
                   {member.phone}
                 </div>
               </div>
 
-              <div className="pt-6 border-t border-gray-50 dark:border-slate-800">
-                <div className="text-xs text-gray-500 dark:text-gray-400 font-bold">
+              <div className="pt-6 border-t border-border-color">
+                <div className="text-xs text-text-muted font-bold">
                   {member._count?.events || 0} Events Assigned
                 </div>
               </div>
@@ -145,10 +145,10 @@ export default function StaffPage() {
 
       {!isLoading && staff.length === 0 && (
         <div className="py-20 text-center">
-          <h3 className="text-gray-900 dark:text-white font-bold mb-1">
+          <h3 className="text-text-primary font-bold mb-1">
             No staff members found
           </h3>
-          <p className="text-gray-500 dark:text-gray-400">
+          <p className="text-text-muted">
             Add your first staff member to get started.
           </p>
         </div>

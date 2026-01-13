@@ -18,6 +18,20 @@ async function getPackages() {
   }
 }
 
+function parseFeatures(features: string): string[] {
+  try {
+    // Try to parse as JSON first (for seeded data)
+    const parsed = JSON.parse(features);
+    if (Array.isArray(parsed)) return parsed;
+  } catch (e) {
+    // If parsing fails, treat it as comma-separated (for admin UI data)
+  }
+  return features
+    .split(",")
+    .map((f) => f.trim())
+    .filter(Boolean);
+}
+
 export default async function MenuPage() {
   const { categories, items } = await getPublicMenu();
   const packages = await getPackages();
@@ -36,7 +50,7 @@ export default async function MenuPage() {
               <span className="text-amber-500 font-bold tracking-widest uppercase text-sm">
                 All-Inclusive Experiences
               </span>
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mt-3">
+              <h2 className="text-4xl md:text-5xl font-bold text-text-primary mt-3">
                 Signature Packages
               </h2>
             </div>
@@ -45,65 +59,45 @@ export default async function MenuPage() {
               {packages.map((pkg, i) => (
                 <div
                   key={pkg.id}
-                  className={`group relative bg-white dark:bg-gray-900/50 rounded-[2.5rem] p-8 border transition-all duration-500 backdrop-blur-sm flex flex-col ${
-                    i === 1
-                      ? "border-amber-500 shadow-2xl shadow-amber-500/20 scale-105 z-10"
-                      : "border-gray-100 dark:border-white/5 hover:border-amber-500/30 hover:shadow-xl hover:-translate-y-2 dark:hover:bg-gray-900/80"
-                  }`}
+                  className="group relative bg-bg-primary rounded-[2.5rem] p-8 border border-border-color hover:border-amber-500/30 hover:shadow-xl hover:-translate-y-2 transition-all duration-500 backdrop-blur-sm flex flex-col"
                 >
-                  {i === 1 && (
-                    <div className="absolute inset-0 bg-gradient-to-b from-amber-500/5 to-transparent rounded-[2.5rem] pointer-events-none"></div>
-                  )}
-
                   {pkg.tag && (
-                    <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-amber-500 text-white px-6 py-2 rounded-full text-xs font-bold flex items-center gap-2 shadow-lg shadow-amber-500/30">
+                    <div className="absolute -top-5 left-1/2 -translate-x-1/2 bg-slate-900 dark:bg-amber-500 text-white px-6 py-2 rounded-full text-xs font-bold flex items-center gap-2 shadow-lg shadow-slate-200 dark:shadow-amber-500/30">
                       <Crown className="h-3 w-3" /> {pkg.tag}
                     </div>
                   )}
 
                   <div className="mb-8 text-center">
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                    <h3 className="text-xl font-bold text-text-primary mb-3">
                       {pkg.name}
                     </h3>
-                    <p className="text-gray-500 dark:text-gray-400 text-sm h-10 line-clamp-2 px-4">
+                    <p className="text-text-secondary text-sm h-10 line-clamp-2 px-4">
                       {pkg.description}
                     </p>
                   </div>
 
                   <div className="flex items-baseline justify-center gap-1 mb-10">
-                    <span className="text-5xl font-bold text-gray-900 dark:text-white tracking-tight">
-                      ${pkg.price}
+                    <span className="text-5xl font-bold text-text-primary tracking-tight">
+                      ₹{pkg.price}
                     </span>
-                    <span className="text-gray-400 font-medium">/person</span>
+                    <span className="text-text-muted font-medium">/person</span>
                   </div>
 
                   <ul className="space-y-4 mb-10 flex-grow">
-                    {pkg.features.split(",").map((feature) => (
+                    {parseFeatures(pkg.features).map((feature, idx) => (
                       <li
-                        key={feature}
-                        className="flex items-start gap-4 text-sm text-gray-600 dark:text-gray-300"
+                        key={`${pkg.id}-feature-${idx}`}
+                        className="flex items-start gap-4 text-sm text-text-secondary"
                       >
-                        <div
-                          className={`mt-0.5 p-1 rounded-full ${
-                            i === 1
-                              ? "bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-500"
-                              : "bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-gray-400"
-                          }`}
-                        >
+                        <div className="mt-0.5 p-1 rounded-full bg-bg-secondary text-text-muted">
                           <Check className="h-3 w-3" />
                         </div>
-                        <span className="font-medium">{feature.trim()}</span>
+                        <span className="font-medium">{feature}</span>
                       </li>
                     ))}
                   </ul>
 
-                  <button
-                    className={`w-full py-4 rounded-xl font-bold transition-all flex items-center justify-center gap-2 ${
-                      i === 1
-                        ? "bg-gradient-to-r from-amber-500 to-amber-600 text-white hover:shadow-lg hover:shadow-amber-500/25 active:scale-95"
-                        : "bg-gray-100 dark:bg-white/10 text-gray-900 dark:text-white hover:bg-amber-500 hover:text-white dark:hover:bg-amber-500 transition-colors"
-                    }`}
-                  >
+                  <button className="w-full py-4 rounded-xl font-bold transition-all flex items-center justify-center gap-2 bg-bg-secondary text-text-primary hover:bg-gradient-to-r hover:from-amber-500 hover:to-amber-600 hover:text-white hover:shadow-lg hover:shadow-amber-500/25 active:scale-95 duration-300">
                     Select Package
                   </button>
                 </div>
@@ -120,7 +114,7 @@ export default async function MenuPage() {
       <div className="py-24 relative overflow-hidden">
         <div className="absolute inset-0 bg-amber-500"></div>
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
-        <div className="absolute -left-20 -bottom-20 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+        <div className="absolute -left-20 -bottom-20 w-96 h-96 bg-bg-primary/10 rounded-full blur-3xl"></div>
         <div className="absolute -right-20 -top-20 w-96 h-96 bg-black/10 rounded-full blur-3xl"></div>
 
         <div className="max-w-4xl mx-auto px-4 text-center relative z-10 text-white">
@@ -131,7 +125,7 @@ export default async function MenuPage() {
             Our chefs love a challenge. Let's design a custom menu that tells
             your story through flavor, texture, and presentation.
           </p>
-          <button className="bg-white text-amber-600 px-12 py-5 rounded-full font-bold text-lg hover:bg-gray-50 transition-all shadow-2xl hover:shadow-white/20 hover:-translate-y-1 active:scale-95">
+          <button className="bg-text-primary text-bg-primary px-12 py-5 rounded-full font-bold text-lg hover:bg-amber-600 hover:text-white transition-all shadow-2xl active:scale-95">
             Request Bespoke Consultation
           </button>
         </div>

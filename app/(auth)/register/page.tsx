@@ -17,7 +17,6 @@ import {
 
 export default function RegisterPage() {
   const router = useRouter();
-  const [role, setRole] = useState("STAFF");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -33,7 +32,7 @@ export default function RegisterPage() {
       const res = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, role }),
+        body: JSON.stringify({ ...data, role: "STAFF" }),
       });
 
       if (res.ok) {
@@ -52,13 +51,13 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-black p-4 transition-colors duration-500">
+    <div className="min-h-screen flex items-center justify-center bg-bg-secondary dark:bg-background p-4 transition-colors duration-500">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         className="w-full max-w-xl"
       >
-        <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-2xl p-10 md:p-12 border border-gray-100 dark:border-gray-800 transition-colors">
+        <div className="bg-bg-primary rounded-[2.5rem] shadow-2xl p-10 md:p-12 border border-border-color transition-colors">
           <div className="text-center mb-10">
             <Link
               href="/"
@@ -66,11 +65,11 @@ export default function RegisterPage() {
             >
               <Utensils className="h-8 w-8 text-white" />
             </Link>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-              Join the Team
+            <h1 className="text-3xl font-bold text-text-primary mb-2">
+              Create Account
             </h1>
-            <p className="text-gray-500 dark:text-gray-400 font-medium">
-              Create your professional account below
+            <p className="text-text-secondary font-medium">
+              Register to access your account
             </p>
           </div>
 
@@ -83,34 +82,34 @@ export default function RegisterPage() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">
+                <label className="text-sm font-bold text-text-secondary ml-1">
                   Full Name
                 </label>
                 <div className="relative">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted" />
                   <input
                     name="name"
                     type="text"
                     placeholder="John Doe"
                     disabled={isLoading}
-                    className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-gray-900 dark:text-white transition-all font-medium disabled:opacity-50"
+                    className="w-full pl-12 pr-4 py-4 rounded-2xl bg-bg-secondary border border-border-color focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-text-primary transition-all font-medium disabled:opacity-50"
                     required
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">
-                  Work Email
+                <label className="text-sm font-bold text-text-secondary ml-1">
+                  Email Address
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted" />
                   <input
                     name="email"
                     type="email"
                     placeholder="john@testful.com"
                     disabled={isLoading}
-                    className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-gray-900 dark:text-white transition-all font-medium disabled:opacity-50"
+                    className="w-full pl-12 pr-4 py-4 rounded-2xl bg-bg-secondary border border-border-color focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-text-primary transition-all font-medium disabled:opacity-50"
                     required
                   />
                 </div>
@@ -118,51 +117,17 @@ export default function RegisterPage() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">
-                Account Role
-              </label>
-              <div className="grid grid-cols-2 gap-4">
-                <button
-                  type="button"
-                  disabled={isLoading}
-                  onClick={() => setRole("ADMIN")}
-                  className={`py-4 rounded-2xl font-bold border-2 transition-all flex items-center justify-center gap-2 ${
-                    role === "ADMIN"
-                      ? "bg-amber-500 border-amber-500 text-white shadow-lg shadow-amber-200 dark:shadow-amber-500/20"
-                      : "bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-amber-200 dark:hover:border-amber-500/30"
-                  } disabled:opacity-50`}
-                >
-                  <Shield className="h-4 w-4" />
-                  Administrator
-                </button>
-                <button
-                  type="button"
-                  disabled={isLoading}
-                  onClick={() => setRole("STAFF")}
-                  className={`py-4 rounded-2xl font-bold border-2 transition-all flex items-center justify-center gap-2 ${
-                    role === "STAFF"
-                      ? "bg-amber-500 border-amber-500 text-white shadow-lg shadow-amber-200 dark:shadow-amber-500/20"
-                      : "bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-amber-200 dark:hover:border-amber-500/30"
-                  } disabled:opacity-50`}
-                >
-                  <User className="h-4 w-4" />
-                  User
-                </button>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">
+              <label className="text-sm font-bold text-text-secondary ml-1">
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted" />
                 <input
                   name="password"
                   type="password"
                   placeholder="••••••••"
                   disabled={isLoading}
-                  className="w-full pl-12 pr-4 py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-gray-900 dark:text-white transition-all font-medium disabled:opacity-50"
+                  className="w-full pl-12 pr-4 py-4 rounded-2xl bg-bg-secondary border border-border-color focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-text-primary transition-all font-medium disabled:opacity-50"
                   required
                 />
               </div>
@@ -171,7 +136,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-gray-900 dark:bg-amber-500 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-amber-500 dark:hover:bg-amber-600 transition-all active:scale-[0.98] shadow-xl hover:shadow-amber-200/50 disabled:opacity-50 mt-8"
+              className="w-full bg-text-primary text-bg-primary py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-amber-500 hover:text-white transition-all active:scale-[0.98] shadow-xl hover:shadow-amber-200/50 disabled:opacity-50 mt-8"
             >
               {isLoading ? (
                 <>
@@ -187,8 +152,8 @@ export default function RegisterPage() {
             </button>
           </form>
 
-          <div className="mt-10 pt-10 border-t border-gray-50 dark:border-gray-800 text-center transition-colors">
-            <p className="text-gray-500 dark:text-gray-400 font-medium">
+          <div className="mt-10 pt-10 border-t border-border-color text-center transition-colors">
+            <p className="text-text-secondary font-medium">
               Already have an account?{" "}
               <Link
                 href="/login"

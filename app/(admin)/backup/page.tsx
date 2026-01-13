@@ -49,37 +49,37 @@ export default function BackupPage() {
   return (
     <div className="space-y-8 max-w-4xl">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+        <h1 className="text-3xl font-bold text-text-primary">
           Data Backup & Restore
         </h1>
-        <p className="text-gray-500 dark:text-gray-400">
+        <p className="text-text-secondary">
           Securely backup your application data or restore from a previous file.
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Backup Card */}
-        <div className="bg-white dark:bg-slate-950 p-10 rounded-[2.5rem] border border-gray-100 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all">
+        <div className="bg-bg-primary p-10 rounded-[2.5rem] border border-border-color shadow-sm hover:shadow-xl transition-all">
           <div className="w-16 h-16 rounded-[1.5rem] bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center text-amber-600 mb-8">
             <Download className="h-8 w-8" />
           </div>
-          <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          <h3 className="text-2xl font-bold text-text-primary mb-4">
             Manual Backup
           </h3>
-          <p className="text-gray-500 dark:text-gray-400 mb-8 leading-relaxed">
+          <p className="text-text-secondary mb-8 leading-relaxed">
             Generate a full snapshot of your database (JSON format). Perfect for
             off-site storage and data portability.
           </p>
 
           {lastBackup && (
-            <div className="p-4 bg-gray-50 dark:bg-slate-900 rounded-2xl mb-8 flex items-center justify-between">
+            <div className="p-4 bg-bg-secondary rounded-2xl mb-8 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-                <span className="text-sm font-bold text-gray-700 dark:text-gray-300">
+                <span className="text-sm font-bold text-text-secondary">
                   Last Backup
                 </span>
               </div>
-              <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">
+              <span className="text-sm text-text-muted font-medium">
                 {lastBackup}
               </span>
             </div>
@@ -88,7 +88,7 @@ export default function BackupPage() {
           <button
             onClick={handleBackup}
             disabled={isBackingUp}
-            className="w-full bg-gray-900 dark:bg-amber-500 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-3 hover:bg-amber-500 dark:hover:bg-amber-600 transition-all active:scale-95 disabled:opacity-50"
+            className="w-full bg-text-primary text-bg-primary py-4 rounded-2xl font-bold flex items-center justify-center gap-3 hover:opacity-90 transition-all active:scale-95 disabled:opacity-50"
           >
             {isBackingUp ? (
               <>
@@ -105,14 +105,14 @@ export default function BackupPage() {
         </div>
 
         {/* Restore Card */}
-        <div className="bg-white dark:bg-slate-950 p-10 rounded-[2.5rem] border border-gray-100 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all">
+        <div className="bg-bg-primary p-10 rounded-[2.5rem] border border-border-color shadow-sm hover:shadow-xl transition-all">
           <div className="w-16 h-16 rounded-[1.5rem] bg-purple-50 dark:bg-purple-500/10 flex items-center justify-center text-purple-600 mb-8">
             <Upload className="h-8 w-8" />
           </div>
-          <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          <h3 className="text-2xl font-bold text-text-primary mb-4">
             Restore Data
           </h3>
-          <p className="text-gray-500 dark:text-gray-400 mb-8 leading-relaxed">
+          <p className="text-text-secondary mb-8 leading-relaxed">
             Upload a previously exported backup file to restore your system
             state.
             <span className="text-red-500 font-bold">
@@ -121,16 +121,16 @@ export default function BackupPage() {
             </span>
           </p>
 
-          <div className="relative group cursor-not-allowed border-2 border-dashed border-gray-100 dark:border-slate-800 rounded-3xl p-10 text-center mb-4 opacity-50">
-            <Upload className="h-10 w-10 text-gray-300 mx-auto mb-4" />
-            <p className="text-sm font-bold text-gray-400">
+          <div className="relative group cursor-not-allowed border-2 border-dashed border-border-color rounded-3xl p-10 text-center mb-4 opacity-50">
+            <Upload className="h-10 w-10 text-text-muted mx-auto mb-4" />
+            <p className="text-sm font-bold text-text-muted">
               Restore feature coming soon
             </p>
           </div>
 
           <button
             disabled
-            className="w-full bg-gray-100 dark:bg-slate-900 text-gray-400 py-4 rounded-2xl font-bold flex items-center justify-center gap-3 cursor-not-allowed"
+            className="w-full bg-bg-secondary text-text-muted py-4 rounded-2xl font-bold flex items-center justify-center gap-3 cursor-not-allowed"
           >
             <Database className="h-5 w-5" />
             Restore System

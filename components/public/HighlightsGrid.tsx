@@ -45,7 +45,7 @@ export function HighlightsGrid({ highlights }: HighlightsGridProps) {
             />
           ))
         ) : (
-          <div className="col-span-3 text-center py-20 text-gray-500">
+          <div className="col-span-3 text-center py-20 text-text-muted">
             <p>No highlights available yet. Check back soon!</p>
           </div>
         )}
