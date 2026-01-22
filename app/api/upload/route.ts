@@ -29,6 +29,8 @@ export async function POST(req: Request) {
     let subDir = "highlights";
     if (type === "menu") {
       subDir = "menu";
+    } else if (type === "events") {
+      subDir = "events";
     }
     // Add other types here if needed
 

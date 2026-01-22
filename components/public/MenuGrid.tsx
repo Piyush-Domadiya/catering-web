@@ -162,8 +162,8 @@ export function MenuGrid({ categories, items }: MenuGridProps) {
                 No culinary matches found
               </h3>
               <p className="text-text-secondary max-w-md mx-auto mb-8">
-                We couldn't find any items matching your criteria. Try exploring
-                our other exquisite categories.
+                We couldn&apos;t find any items matching your criteria. Try
+                exploring our other exquisite categories.
               </p>
               <button
                 onClick={() => {

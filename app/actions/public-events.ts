@@ -6,7 +6,7 @@ export async function getPublicEvents(options?: { limit?: number }) {
   try {
     const events = await prisma.event.findMany({
       where: {
-        status: "UPCOMING", // Only show upcoming events
+        status: "COMPLETED", // Show completed events in gallery
         images: {
           some: {}, // Only show events that have images
         },

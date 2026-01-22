@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { getCurrentBusinessId } from "@/lib/auth-helpers";
 
 export async function GET(
   req: Request,
@@ -7,8 +8,14 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const event = await prisma.event.findUnique({
-      where: { id },
+    const businessId = await getCurrentBusinessId();
+
+    if (!businessId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const event = await prisma.event.findFirst({
+      where: { id, businessId },
       include: {
         customer: true,
         staff: {
@@ -36,19 +43,55 @@ export async function PATCH(
 ) {
   try {
     const { id } = await params;
-    const { name, date, time, location, type, customerId, status } =
-      await req.json();
+    const businessId = await getCurrentBusinessId();
+
+    if (!businessId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const {
+      name,
+      date,
+      time,
+      location,
+      type,
+      customerId,
+      packageId,
+      status,
+      guestCount,
+      perPlateCost,
+      taxRate,
+      discount,
+      menuItems,
+      isQuote,
+    } = await req.json();
+
+    // Verify ownership before update
+    const existingEvent = await prisma.event.findFirst({
+        where: { id, businessId }
+    });
+
+    if (!existingEvent) {
+        return new NextResponse("Event not found", { status: 404 });
+    }
 
     const event = await prisma.event.update({
       where: { id },
       data: {
         ...(name && { name }),
         ...(date && { date: new Date(date) }),
-        ...(time && { time }),
+        ...(time !== undefined && { time }),
         ...(location && { location }),
         ...(type && { type }),
         ...(customerId && { customerId }),
+        ...(packageId !== undefined && { packageId }),
         ...(status && { status }),
+        ...(guestCount !== undefined && { guestCount: guestCount ? parseInt(guestCount) : null }),
+        ...(perPlateCost !== undefined && { perPlateCost: perPlateCost ? parseFloat(perPlateCost) : null }),
+        ...(taxRate !== undefined && { taxRate: taxRate ? parseFloat(taxRate) : 0 }),
+        ...(discount !== undefined && { discount: discount ? parseFloat(discount) : 0 }),
+        ...(menuItems !== undefined && { menuItems }),
+        ...(isQuote !== undefined && { isQuote: !!isQuote }),
       },
       include: {
         customer: true,
@@ -71,6 +114,21 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
+    const businessId = await getCurrentBusinessId();
+
+    if (!businessId) {
+       return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    // Verify ownership
+    const existingEvent = await prisma.event.findFirst({
+        where: { id, businessId }
+    });
+
+    if (!existingEvent) {
+        return new NextResponse("Event not found", { status: 404 });
+    }
+
     await prisma.event.delete({
       where: { id },
     });

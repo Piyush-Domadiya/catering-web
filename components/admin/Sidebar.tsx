@@ -16,6 +16,7 @@ import {
   Menu,
   Package,
   Sparkles,
+  MessageSquare,
 } from "lucide-react";
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -23,6 +24,7 @@ import { signOut } from "next-auth/react";
 
 const menuItems = [
   { name: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
+  { name: "Inquiries", icon: MessageSquare, href: "/inquiries" },
   { name: "Customers", icon: Users, href: "/customers" },
   { name: "Events", icon: Calendar, href: "/events" },
   { name: "Highlights", icon: Sparkles, href: "/highlights" },

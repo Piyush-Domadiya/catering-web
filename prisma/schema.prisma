@@ -10,32 +10,68 @@ datasource db {
   url      = "file:./dev.db"
 }
 
+// Multi-tenant: Business model
+model Business {
+  id             String   @id @default(cuid())
+  name           String
+  ownerName      String
+  phone          String
+  email          String?
+  address        String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  // Relations
+  users            User[]
+  customers        Customer[]
+  events           Event[]
+  menuCategories   MenuCategory[]
+  packages         Package[]
+  highlights       Highlight[]
+  staff            Staff[]
+  contactInquiries ContactInquiry[]
+  settings         GlobalSettings?
+  notifications    Notification[]
+}
+
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  name      String?
-  role      String   @default("STAFF") // ADMIN or STAFF
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String         @id @default(cuid())
+  phone         String         @unique // Primary login credential
+  email         String? // Optional for notifications
+  password      String
+  name          String?
+  role          String         @default("ADMIN") // ADMIN for business owner
+  businessId    String
+  business      Business       @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  notifications Notification[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
 
 model Customer {
-  id        String   @id @default(cuid())
-  name      String
-  email     String?  @unique
-  phone     String
-  address   String?
-  events    Event[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String   @id @default(cuid())
+  name       String
+  email      String?
+  phone      String
+  address    String?
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  events     Event[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([email, businessId])
 }
 
 model MenuCategory {
-  id        String     @id @default(cuid())
-  name      String     @unique
-  items     MenuItem[]
-  createdAt DateTime   @default(now())
+  id         String     @id @default(cuid())
+  name       String
+  businessId String
+  business   Business   @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  items      MenuItem[]
+  createdAt  DateTime   @default(now())
+
+  @@unique([name, businessId])
 }
 
 model MenuItem {
@@ -52,36 +88,49 @@ model MenuItem {
 }
 
 model Event {
-  id         String       @id @default(cuid())
-  name       String
-  date       DateTime
-  location   String
-  type       String // Wedding, Birthday, Corporate, etc.
-  time       String?
-  status     String       @default("UPCOMING") // UPCOMING, COMPLETED, CANCELLED
-  customer   Customer     @relation(fields: [customerId], references: [id])
-  customerId String
-  images     EventImage[]
-  staff      EventStaff[]
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
+  id           String       @id @default(cuid())
+  name         String
+  date         DateTime
+  location     String
+  type         String // Wedding, Birthday, Corporate, etc.
+  time         String?
+  status       String       @default("UPCOMING") // UPCOMING, COMPLETED, CANCELLED, QUOTATION
+  guestCount   Int?
+  perPlateCost Float?
+  taxRate      Float?       @default(0)
+  discount     Float?       @default(0)
+  menuItems    String?      // Newline-separated list of items
+  isQuote      Boolean      @default(false)
+  customer     Customer     @relation(fields: [customerId], references: [id])
+  customerId   String
+  businessId   String
+  business     Business     @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  packageId    String?
+  package      Package?     @relation(fields: [packageId], references: [id])
+  images       EventImage[]
+  staff        EventStaff[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
 }
 
 model EventImage {
-  id      String @id @default(cuid())
+  id      String  @id @default(cuid())
   url     String
-  event   Event  @relation(fields: [eventId], references: [id])
+  caption String?
+  event   Event   @relation(fields: [eventId], references: [id])
   eventId String
 }
 
 model Staff {
-  id        String       @id @default(cuid())
-  name      String
-  role      String // Chef, Helper, Manager
-  phone     String
-  events    EventStaff[]
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+  id         String       @id @default(cuid())
+  name       String
+  role       String // Chef, Helper, Manager
+  phone      String
+  businessId String
+  business   Business     @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  events     EventStaff[]
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
 }
 
 model EventStaff {
@@ -105,6 +154,8 @@ model ContactInquiry {
   venueLocation String?
   message       String?
   status        String   @default("NEW") // NEW, CONTACTED, CONVERTED, CLOSED
+  businessId    String
+  business      Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
@@ -116,21 +167,26 @@ model Package {
   price       Float
   features    String // JSON string or comma-separated
   tag         String?
+  businessId  String
+  business    Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  events      Event[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
 model Highlight {
-  id        String   @id @default(cuid())
-  title     String?
-  imageUrl  String
-  active    Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String   @id @default(cuid())
+  title      String?
+  imageUrl   String
+  active     Boolean  @default(true)
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model GlobalSettings {
-  id             String   @id @default("settings")
+  id             String   @id @default(cuid())
   companyName    String   @default("Testful Affaire")
   contactEmail   String?
   contactPhone   String?
@@ -138,5 +194,21 @@ model GlobalSettings {
   address        String?
   facebookUrl    String?
   instagramUrl   String?
+  businessId     String   @unique
+  business       Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
   updatedAt      DateTime @updatedAt
+}
+
+model Notification {
+  id         String   @id @default(cuid())
+  title      String
+  message    String
+  type       String   @default("INFO") // INFO, SUCCESS, WARNING, ERROR
+  read       Boolean  @default(false)
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }

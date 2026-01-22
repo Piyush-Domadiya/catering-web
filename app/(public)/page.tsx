@@ -61,7 +61,7 @@ export default async function HomePage() {
                 Recent Highlights
               </h2>
               <p className="text-text-muted text-lg">
-                Glimpses into the unforgettable events we've curated.
+                Glimpses into the unforgettable events we&apos;ve curated.
               </p>
             </div>
             <Link

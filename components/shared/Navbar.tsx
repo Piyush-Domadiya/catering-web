@@ -1,3 +1,14 @@
+/**
+ * Navbar Component
+ * This is the main navigation bar that appears on every page
+ *
+ * Features:
+ * - Responsive design (mobile + desktop)
+ * - Role-based navigation (Admin vs Customer vs Guest)
+ * - Theme toggle
+ * - Scroll-based styling
+ * - User authentication status
+ */
 "use client";
 
 import Link from "next/link";
@@ -13,9 +24,11 @@ import {
   LayoutDashboard,
 } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
+import { HeaderActions } from "./HeaderActions";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
+// Navigation links - For all public pages
 const navLinks = [
   { name: "Home", href: "/" },
   { name: "Menu", href: "/menu" },
@@ -24,10 +37,10 @@ const navLinks = [
 ];
 
 export default function Navbar() {
-  const pathname = usePathname();
-  const { data: session, status } = useSession();
-  const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname(); // Current page path
+  const { data: session, status } = useSession(); // User login status
+  const [isOpen, setIsOpen] = useState(false); // Mobile menu state
+  const [scrolled, setScrolled] = useState(false); // Page scroll state
 
   useEffect(() => {
     const handleScroll = () => {
@@ -80,11 +93,11 @@ export default function Navbar() {
             </div>
 
             <div className="flex items-center gap-4 pl-4">
-              <ThemeToggle />
+              <HeaderActions />
 
               {status === "authenticated" ? (
                 <div className="flex items-center gap-3">
-                  {(session.user as any)?.role === "ADMIN" ? (
+                  {session.user.role === "ADMIN" ? (
                     <Link
                       href="/dashboard"
                       className="flex items-center gap-2 text-text-secondary font-medium hover:text-amber-500 transition-colors"
@@ -122,7 +135,7 @@ export default function Navbar() {
           </div>
 
           <div className="md:hidden flex items-center gap-4">
-            <ThemeToggle />
+            <HeaderActions />
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="text-text-secondary p-2 hover:bg-bg-secondary rounded-full transition-colors"
@@ -160,7 +173,7 @@ export default function Navbar() {
               <div className="pt-4 mt-4 border-t border-border-color flex flex-col gap-3">
                 {status === "authenticated" ? (
                   <>
-                    {(session.user as any)?.role === "ADMIN" ? (
+                    {session.user.role === "ADMIN" ? (
                       <Link
                         href="/dashboard"
                         onClick={() => setIsOpen(false)}

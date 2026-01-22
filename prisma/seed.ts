@@ -1,19 +1,46 @@
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
 async function main() {
   console.log("Start seeding...");
 
-  // 1. Clean up existing data (optional, but good for idempotent runs during dev)
-  // Be careful with this in production!
-  // await prisma.eventStaff.deleteMany();
-  // await prisma.menuItem.deleteMany();
-  // await prisma.menuCategory.deleteMany();
-  // await prisma.package.deleteMany();
-  // await prisma.event.deleteMany();
-  // await prisma.customer.deleteMany();
-  // await prisma.staff.deleteMany();
+  // 0. Create Demo Business
+  const business = await prisma.business.create({
+    data: {
+      name: "Demo Catering Services",
+      ownerName: "Admin User",
+      phone: "9999999999",
+      email: "admin@testfulaffaire.com",
+    }
+  });
+
+  console.log(`Created Demo Business with ID: ${business.id}`);
+
+  // 1. Create Default Global Settings
+  await prisma.globalSettings.create({
+    data: {
+        businessId: business.id,
+        companyName: "Demo Catering Services",
+        contactPhone: "9999999999",
+        contactEmail: "admin@testfulaffaire.com",
+    }
+  });
+
+  // 1.5. Create Admin User linked to Business
+  const hashedAdminPassword = await bcrypt.hash("admin123", 10);
+  await prisma.user.create({
+    data: {
+      phone: "9999999999",
+      password: hashedAdminPassword,
+      name: "Admin User",
+      email: "admin@testfulaffaire.com",
+      role: "ADMIN",
+      businessId: business.id,
+    },
+  });
+  console.log("Created Admin User (Phone: 9999999999, Password: admin123)");
 
   // 2. Create Staff
   const staffMembers = await Promise.all([
@@ -22,6 +49,7 @@ async function main() {
         name: "Ramesh Maharaj",
         role: "Head Chef",
         phone: "9876543210",
+        businessId: business.id,
       },
     }),
     prisma.staff.create({
@@ -29,6 +57,7 @@ async function main() {
         name: "Suresh Helper",
         role: "Helper",
         phone: "9876543211",
+        businessId: business.id,
       },
     }),
     prisma.staff.create({
@@ -36,6 +65,7 @@ async function main() {
         name: "Mahesh Manager",
         role: "Manager",
         phone: "9876543212",
+        businessId: business.id,
       },
     }),
   ]);
@@ -50,6 +80,7 @@ async function main() {
         email: "rajesh.patel@example.com",
         phone: "9825012345",
         address: "12, Gokuldham Society, Ahmedabad",
+        businessId: business.id,
       },
     }),
     prisma.customer.create({
@@ -58,6 +89,7 @@ async function main() {
         email: "amit.shah@example.com",
         phone: "9825012346",
         address: "45, Satellite Road, Ahmedabad",
+        businessId: business.id,
       },
     }),
     prisma.customer.create({
@@ -66,6 +98,7 @@ async function main() {
         email: "priya.desai@example.com",
         phone: "9825012347",
         address: "B-202, Shivranjani Apts, Vadodara",
+        businessId: business.id,
       },
     }),
   ]);
@@ -132,10 +165,11 @@ async function main() {
   ];
 
   for (const cat of categories) {
-    const createdCat = await prisma.menuCategory.upsert({
-      where: { name: cat.name },
-      update: {},
-      create: { name: cat.name },
+    const createdCat = await prisma.menuCategory.create({
+      data: { 
+          name: cat.name,
+          businessId: business.id
+      },
     });
 
     for (const item of cat.items) {
@@ -202,7 +236,10 @@ async function main() {
 
   for (const pkg of packages) {
     await prisma.package.create({
-      data: pkg,
+      data: {
+          ...pkg,
+          businessId: business.id
+      },
     });
   }
 
@@ -221,6 +258,7 @@ async function main() {
       time: "11:00 AM",
       status: "COMPLETED",
       customerId: customers[0].id, // Rajesh Patel
+      businessId: business.id,
       staff: {
         create: [
           { staffId: staffMembers[0].id }, // Chef
@@ -240,6 +278,7 @@ async function main() {
       time: "07:00 PM",
       status: "UPCOMING",
       customerId: customers[1].id, // Amit Shah
+      businessId: business.id,
       staff: {
         create: [
           { staffId: staffMembers[0].id },
@@ -259,6 +298,7 @@ async function main() {
       time: "06:00 PM",
       status: "UPCOMING",
       customerId: customers[2].id, // Priya Desai
+      businessId: business.id,
     },
   });
 
@@ -274,6 +314,7 @@ async function main() {
       venueLocation: "GIFT City",
       message: "Need a pure veg premium menu quotation.",
       status: "NEW",
+      businessId: business.id,
     }
    });
 

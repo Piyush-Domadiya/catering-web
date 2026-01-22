@@ -1,6 +1,6 @@
 import { getPublicMenu } from "@/app/actions/public-menu";
 import { MenuGrid } from "@/components/public/MenuGrid";
-import { Sparkles, Check, Crown } from "lucide-react";
+import { Check, Crown } from "lucide-react";
 import prisma from "@/lib/prisma";
 import { MenuHero } from "@/components/public/MenuHero";
 
@@ -23,7 +23,7 @@ function parseFeatures(features: string): string[] {
     // Try to parse as JSON first (for seeded data)
     const parsed = JSON.parse(features);
     if (Array.isArray(parsed)) return parsed;
-  } catch (e) {
+  } catch (_e) {
     // If parsing fails, treat it as comma-separated (for admin UI data)
   }
   return features
@@ -56,7 +56,7 @@ export default async function MenuPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-              {packages.map((pkg, i) => (
+              {packages.map((pkg) => (
                 <div
                   key={pkg.id}
                   className="group relative bg-bg-primary rounded-[2.5rem] p-8 border border-border-color hover:border-amber-500/30 hover:shadow-xl hover:-translate-y-2 transition-all duration-500 backdrop-blur-sm flex flex-col"
@@ -122,8 +122,8 @@ export default async function MenuPage() {
             Looking for something <span className="italic">unique?</span>
           </h2>
           <p className="text-white/90 text-xl mb-12 max-w-2xl mx-auto font-light leading-relaxed">
-            Our chefs love a challenge. Let's design a custom menu that tells
-            your story through flavor, texture, and presentation.
+            Let&apos;s design a custom menu that tells your story through
+            flavor, texture, and presentation.
           </p>
           <button className="bg-text-primary text-bg-primary px-12 py-5 rounded-full font-bold text-lg hover:bg-amber-600 hover:text-white transition-all shadow-2xl active:scale-95">
             Request Bespoke Consultation

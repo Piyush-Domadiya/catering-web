@@ -14,16 +14,19 @@ async function getMenuData() {
         category: true,
       },
     }),
-    prisma.globalSettings.findUnique({
-      where: { id: "settings" },
-    }),
+    prisma.globalSettings.findFirst(), // Using findFirst since there might be only one or we need one matching some criteria
   ]);
 
-  return { categories, items, whatsappNumber: settings?.whatsappNumber };
+  return {
+    categories,
+    items,
+    whatsappNumber: settings?.whatsappNumber,
+    businessId: settings?.businessId,
+  };
 }
 
 export default async function PlanMenuPage() {
-  const { categories, items, whatsappNumber } = await getMenuData();
+  const { categories, items, whatsappNumber, businessId } = await getMenuData();
 
   return (
     <div className="pt-24 pb-20 min-h-screen bg-bg-secondary">
@@ -42,6 +45,7 @@ export default async function PlanMenuPage() {
           initialCategories={categories}
           initialItems={items}
           whatsappNumber={whatsappNumber}
+          businessId={businessId}
         />
       </div>
     </div>

@@ -1,17 +1,35 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { getCurrentBusinessId } from "@/lib/auth-helpers";
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    const businessId = await getCurrentBusinessId();
+
+    if (!businessId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const { searchParams } = new URL(req.url);
+    const customerId = searchParams.get("customerId");
+
     const events = await prisma.event.findMany({
+      where: {
+        businessId,
+        ...(customerId && { customerId }),
+      },
       orderBy: { date: "desc" },
       include: {
         customer: {
           select: {
             id: true,
             name: true,
+            phone: true,
+            email: true,
           },
         },
+        package: true,
+        images: true,
         _count: {
           select: { staff: true },
         },
@@ -27,8 +45,28 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const { name, date, time, location, type, customerId, status } =
-      await req.json();
+    const businessId = await getCurrentBusinessId();
+
+    if (!businessId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const {
+      name,
+      date,
+      time,
+      location,
+      type,
+      customerId,
+      packageId,
+      status,
+      guestCount,
+      perPlateCost,
+      taxRate,
+      discount,
+      menuItems,
+      isQuote,
+    } = await req.json();
 
     if (!name || !date || !location || !type || !customerId) {
       return new NextResponse("Missing required fields", { status: 400 });
@@ -42,7 +80,15 @@ export async function POST(req: Request) {
         location,
         type,
         customerId,
+        packageId,
         status: status || "UPCOMING",
+        guestCount: guestCount ? parseInt(guestCount) : null,
+        perPlateCost: perPlateCost ? parseFloat(perPlateCost) : null,
+        taxRate: taxRate ? parseFloat(taxRate) : 0,
+        discount: discount ? parseFloat(discount) : 0,
+        menuItems,
+        isQuote: !!isQuote,
+        businessId,
       },
       include: {
         customer: true,

@@ -67,8 +67,10 @@ export default function CategoryManagerDialog({
       setEditingId(null);
       setEditName("");
       onRefresh();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error ? err.message : "An unexpected error occurred",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -92,8 +94,10 @@ export default function CategoryManagerDialog({
 
       setCategories(categories.filter((c) => c.id !== id));
       onRefresh();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error ? err.message : "An unexpected error occurred",
+      );
     } finally {
       setIsLoading(false);
     }
@@ -124,8 +128,10 @@ export default function CategoryManagerDialog({
       setCategories([...categories, newCategory]);
       setNewCategoryName("");
       onRefresh();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error ? err.message : "An unexpected error occurred",
+      );
     } finally {
       setIsLoading(false);
     }

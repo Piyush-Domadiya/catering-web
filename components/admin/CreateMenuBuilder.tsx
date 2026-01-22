@@ -11,8 +11,6 @@ import {
   ShoppingCart,
   Copy,
   Printer,
-  ChevronDown,
-  ChevronUp,
 } from "lucide-react";
 
 interface Category {
@@ -42,25 +40,28 @@ export function CreateMenuBuilder({
 }: CreateMenuBuilderProps) {
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState("");
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  // Initialize sidebar state based on screen size
-  useEffect(() => {
-    if (window.innerWidth >= 1024) {
-      setIsSidebarOpen(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth >= 1024;
     }
-  }, []);
+    return false;
+  });
 
   // Group items by category to display them in organized sections
-  const itemsByCategory = categories.reduce((acc, category) => {
-    acc[category.name] = initialItems.filter(
-      (item) =>
-        item.categoryId === category.id &&
-        (item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          item.description?.toLowerCase().includes(searchQuery.toLowerCase()))
-    );
-    return acc;
-  }, {} as Record<string, MenuItem[]>);
+  const itemsByCategory = categories.reduce(
+    (acc, category) => {
+      acc[category.name] = initialItems.filter(
+        (item) =>
+          item.categoryId === category.id &&
+          (item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            item.description
+              ?.toLowerCase()
+              .includes(searchQuery.toLowerCase())),
+      );
+      return acc;
+    },
+    {} as Record<string, MenuItem[]>,
+  );
 
   // Toggle selection of a menu item for the custom menu
   const toggleItem = (itemId: string) => {

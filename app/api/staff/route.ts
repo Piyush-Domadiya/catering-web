@@ -1,9 +1,17 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { getCurrentBusinessId } from "@/lib/auth-helpers";
 
 export async function GET() {
   try {
+    const businessId = await getCurrentBusinessId();
+
+    if (!businessId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
     const staff = await prisma.staff.findMany({
+      where: { businessId },
       orderBy: { createdAt: "desc" },
       include: {
         _count: {
@@ -21,6 +29,12 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
+    const businessId = await getCurrentBusinessId();
+
+    if (!businessId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
     const { name, role, phone } = await req.json();
 
     if (!name || !role || !phone) {
@@ -34,6 +48,7 @@ export async function POST(req: Request) {
         name,
         role,
         phone,
+        businessId,
       },
     });
 

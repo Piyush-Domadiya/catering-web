@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Building, Save, Loader2, Globe, Phone, Mail } from "lucide-react";
+import { motion } from "framer-motion";
 
 export function BusinessInfoForm() {
   const [loading, setLoading] = useState(true);
@@ -79,108 +80,146 @@ export function BusinessInfoForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
+    <form onSubmit={handleSubmit} className="space-y-10">
       {message && (
-        <div
-          className={`p-4 rounded-xl text-sm font-bold ${
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className={`p-5 rounded-2xl text-sm font-bold flex items-center gap-3 border ${
             message.type === "success"
-              ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-              : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+              ? "bg-emerald-50 text-emerald-700 border-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-500/20"
+              : "bg-red-50 text-red-700 border-red-100 dark:bg-red-900/20 dark:text-red-400 dark:border-red-500/20"
           }`}
         >
+          <div
+            className={`w-8 h-8 rounded-full flex items-center justify-center ${
+              message.type === "success" ? "bg-emerald-500/20" : "bg-red-500/20"
+            }`}
+          >
+            <Save className="h-4 w-4" />
+          </div>
           {message.text}
-        </div>
+        </motion.div>
       )}
 
-      <div className="flex items-center gap-3 mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-2xl text-blue-700 dark:text-blue-400">
-        <Building className="h-5 w-5" />
-        <span className="text-sm font-bold">Public Contact Information</span>
+      <div className="bg-blue-500/5 border border-blue-500/10 rounded-[2rem] p-6 flex items-center gap-5">
+        <div className="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center shrink-0">
+          <Building className="h-6 w-6 text-blue-500" />
+        </div>
+        <div>
+          <h4 className="font-black text-text-primary">Contact Information</h4>
+          <p className="text-sm text-text-muted font-medium">
+            This information will be displayed on your public profile.
+          </p>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-2">
-          <label className="text-sm font-bold text-text-secondary ml-1">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="space-y-3">
+          <label className="text-sm font-black text-text-muted uppercase tracking-widest ml-1">
             Company Name
           </label>
-          <input
-            type="text"
-            value={formData.companyName}
-            onChange={(e) =>
-              setFormData({ ...formData, companyName: e.target.value })
-            }
-            className="w-full px-5 py-4 rounded-2xl bg-bg-secondary border border-border-color focus:bg-bg-primary focus:border-amber-500 focus:outline-none transition-all font-medium text-text-primary"
-          />
+          <div className="relative group">
+            <Building className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted group-focus-within:text-amber-500 transition-colors" />
+            <input
+              type="text"
+              value={formData.companyName}
+              onChange={(e) =>
+                setFormData({ ...formData, companyName: e.target.value })
+              }
+              className="w-full pl-14 pr-6 py-4 rounded-2xl bg-bg-secondary/50 border border-border-color/50 focus:bg-bg-primary focus:border-amber-500 focus:ring-4 focus:ring-amber-500/5 focus:outline-none transition-all font-bold text-text-primary shadow-sm"
+              placeholder="Your Brand Name"
+            />
+          </div>
         </div>
-        <div className="space-y-2">
-          <label className="text-sm font-bold text-text-secondary ml-1">
-            Address
+        <div className="space-y-3 md:col-span-2 lg:col-span-1">
+          <label className="text-sm font-black text-text-muted uppercase tracking-widest ml-1">
+            Business Address
           </label>
-          <input
-            type="text"
-            value={formData.address}
-            onChange={(e) =>
-              setFormData({ ...formData, address: e.target.value })
-            }
-            className="w-full px-5 py-4 rounded-2xl bg-bg-secondary dark:bg-gray-900 border border-transparent focus:bg-bg-primary dark:focus:bg-gray-800 focus:border-amber-500 focus:outline-none transition-all font-medium text-text-primary"
-          />
+          <div className="relative group">
+            <Globe className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted group-focus-within:text-amber-500 transition-colors" />
+            <input
+              type="text"
+              value={formData.address}
+              onChange={(e) =>
+                setFormData({ ...formData, address: e.target.value })
+              }
+              className="w-full pl-14 pr-6 py-4 rounded-2xl bg-bg-secondary/50 border border-border-color/50 focus:bg-bg-primary focus:border-amber-500 focus:ring-4 focus:ring-amber-500/5 focus:outline-none transition-all font-bold text-text-primary shadow-sm"
+              placeholder="City, State, Country"
+            />
+          </div>
         </div>
-        <div className="space-y-2">
-          <label className="text-sm font-bold text-text-secondary ml-1">
-            Contact Email
+        <div className="space-y-3">
+          <label className="text-sm font-black text-text-muted uppercase tracking-widest ml-1">
+            Support Email
           </label>
-          <div className="relative">
-            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted" />
+          <div className="relative group">
+            <Mail className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted group-focus-within:text-amber-500 transition-colors" />
             <input
               type="email"
               value={formData.contactEmail}
               onChange={(e) =>
                 setFormData({ ...formData, contactEmail: e.target.value })
               }
-              className="w-full pl-12 pr-4 py-4 rounded-2xl bg-bg-secondary dark:bg-gray-900 border border-transparent focus:bg-bg-primary dark:focus:bg-gray-800 focus:border-amber-500 focus:outline-none transition-all font-medium text-text-primary placeholder:text-text-muted"
+              className="w-full pl-14 pr-6 py-4 rounded-2xl bg-bg-secondary/50 border border-border-color/50 focus:bg-bg-primary focus:border-amber-500 focus:ring-4 focus:ring-amber-500/5 focus:outline-none transition-all font-bold text-text-primary shadow-sm"
+              placeholder="support@example.com"
             />
           </div>
         </div>
-        <div className="space-y-2">
-          <label className="text-sm font-bold text-text-secondary ml-1">
+        <div className="space-y-3">
+          <label className="text-sm font-black text-text-muted uppercase tracking-widest ml-1">
             Phone Number
           </label>
-          <div className="relative">
-            <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted" />
+          <div className="relative group">
+            <Phone className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted group-focus-within:text-amber-500 transition-colors" />
             <input
               type="tel"
               value={formData.contactPhone}
               onChange={(e) =>
                 setFormData({ ...formData, contactPhone: e.target.value })
               }
-              className="w-full pl-12 pr-4 py-4 rounded-2xl bg-bg-secondary dark:bg-gray-900 border border-transparent focus:bg-bg-primary dark:focus:bg-gray-800 focus:border-amber-500 focus:outline-none transition-all font-medium text-text-primary"
+              className="w-full pl-14 pr-6 py-4 rounded-2xl bg-bg-secondary/50 border border-border-color/50 focus:bg-bg-primary focus:border-amber-500 focus:ring-4 focus:ring-amber-500/5 focus:outline-none transition-all font-bold text-text-primary shadow-sm"
+              placeholder="+1 234 567 890"
             />
           </div>
         </div>
-        <div className="space-y-2">
-          <label className="text-sm font-bold text-text-secondary ml-1">
+        <div className="space-y-3">
+          <label className="text-sm font-black text-text-muted uppercase tracking-widest ml-1">
             WhatsApp Number
           </label>
-          <input
-            type="tel"
-            placeholder="Without + like 919876543210"
-            value={formData.whatsappNumber}
-            onChange={(e) =>
-              setFormData({ ...formData, whatsappNumber: e.target.value })
-            }
-            className="w-full px-5 py-4 rounded-2xl bg-bg-secondary dark:bg-gray-900 border border-transparent focus:bg-bg-primary dark:focus:bg-gray-800 focus:border-amber-500 focus:outline-none transition-all font-medium text-text-primary"
-          />
+          <div className="relative group">
+            <div className="absolute left-5 top-1/2 -translate-y-1/2 font-bold text-text-muted group-focus-within:text-amber-500 transition-colors">
+              91
+            </div>
+            <input
+              type="tel"
+              placeholder="9876543210"
+              value={formData.whatsappNumber}
+              onChange={(e) =>
+                setFormData({ ...formData, whatsappNumber: e.target.value })
+              }
+              className="w-full pl-14 pr-6 py-4 rounded-2xl bg-bg-secondary/50 border border-border-color/50 focus:bg-bg-primary focus:border-amber-500 focus:ring-4 focus:ring-amber-500/5 focus:outline-none transition-all font-bold text-text-primary shadow-sm"
+            />
+          </div>
         </div>
       </div>
 
-      <div className="flex items-center gap-3 mt-8 mb-6 p-4 bg-purple-50 dark:bg-purple-900/20 rounded-2xl text-purple-700 dark:text-purple-400">
-        <Globe className="h-5 w-5" />
-        <span className="text-sm font-bold">Social Media Links</span>
+      <div className="bg-purple-500/5 border border-purple-500/10 rounded-[2rem] p-6 flex items-center gap-5">
+        <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center shrink-0">
+          <Globe className="h-6 w-6 text-purple-500" />
+        </div>
+        <div>
+          <h4 className="font-black text-text-primary">Social Presence</h4>
+          <p className="text-sm text-text-muted font-medium">
+            Connect your social media accounts.
+          </p>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-2">
-          <label className="text-sm font-bold text-text-secondary ml-1">
-            Facebook URL
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="space-y-3">
+          <label className="text-sm font-black text-text-muted uppercase tracking-widest ml-1">
+            Facebook Profile
           </label>
           <input
             type="url"
@@ -188,12 +227,13 @@ export function BusinessInfoForm() {
             onChange={(e) =>
               setFormData({ ...formData, facebookUrl: e.target.value })
             }
-            className="w-full px-5 py-4 rounded-2xl bg-bg-secondary dark:bg-gray-900 border border-transparent focus:bg-bg-primary dark:focus:bg-gray-800 focus:border-amber-500 focus:outline-none transition-all font-medium text-text-primary"
+            className="w-full px-6 py-4 rounded-2xl bg-bg-secondary/50 border border-border-color/50 focus:bg-bg-primary focus:border-amber-500 focus:ring-4 focus:ring-amber-500/5 focus:outline-none transition-all font-bold text-text-primary shadow-sm"
+            placeholder="https://facebook.com/yourpage"
           />
         </div>
-        <div className="space-y-2">
-          <label className="text-sm font-bold text-text-secondary ml-1">
-            Instagram URL
+        <div className="space-y-3">
+          <label className="text-sm font-black text-text-muted uppercase tracking-widest ml-1">
+            Instagram Handle
           </label>
           <input
             type="url"
@@ -201,23 +241,24 @@ export function BusinessInfoForm() {
             onChange={(e) =>
               setFormData({ ...formData, instagramUrl: e.target.value })
             }
-            className="w-full px-5 py-4 rounded-2xl bg-bg-secondary dark:bg-gray-900 border border-transparent focus:bg-bg-primary dark:focus:bg-gray-800 focus:border-amber-500 focus:outline-none transition-all font-medium text-text-primary"
+            className="w-full px-6 py-4 rounded-2xl bg-bg-secondary/50 border border-border-color/50 focus:bg-bg-primary focus:border-amber-500 focus:ring-4 focus:ring-amber-500/5 focus:outline-none transition-all font-bold text-text-primary shadow-sm"
+            placeholder="https://instagram.com/yourhandle"
           />
         </div>
       </div>
 
-      <div className="mt-12 pt-8 border-t border-gray-50 dark:border-gray-800 flex justify-end">
+      <div className="pt-8 flex justify-end">
         <button
           type="submit"
           disabled={saving}
-          className="bg-gray-900 dark:bg-white text-white dark:text-black px-8 py-4 rounded-2xl font-bold flex items-center gap-2 hover:bg-amber-500 dark:hover:bg-amber-500 hover:text-white dark:hover:text-white transition-all shadow-xl active:scale-95 disabled:opacity-50"
+          className="bg-text-primary text-bg-primary px-10 py-4 rounded-2xl font-black flex items-center gap-3 hover:bg-amber-500 hover:text-white transition-all shadow-xl shadow-text-primary/10 active:scale-95 disabled:opacity-50 group"
         >
           {saving ? (
             <Loader2 className="h-5 w-5 animate-spin" />
           ) : (
-            <Save className="h-5 w-5" />
+            <Save className="h-5 w-5 group-hover:scale-110 transition-transform" />
           )}
-          Save Business Info
+          Update Business Info
         </button>
       </div>
     </form>

@@ -3,8 +3,8 @@
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { z } from "zod";
+import { getCurrentBusinessId } from "@/lib/auth-helpers";
 
 const MenuItemSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -19,15 +19,24 @@ export type MenuItemData = z.infer<typeof MenuItemSchema>;
 
 async function checkAdmin() {
   const session = await auth();
-  if (!session || (session.user as any).role !== "ADMIN") {
+  const businessId = await getCurrentBusinessId();
+  if (!session || session.user.role !== "ADMIN" || !businessId) {
     throw new Error("Unauthorized: Admin access required");
   }
-  return session;
+  return { session, businessId };
 }
 
 export async function getMenuItems() {
   try {
+    const businessId = await getCurrentBusinessId();
+    if (!businessId) return { success: false, error: "Unauthorized" };
+
     const items = await prisma.menuItem.findMany({
+      where: {
+        category: {
+            businessId: businessId
+        }
+      },
       include: { category: true },
       orderBy: { createdAt: "desc" },
     });
@@ -40,7 +49,11 @@ export async function getMenuItems() {
 
 export async function getCategories() {
   try {
+    const businessId = await getCurrentBusinessId();
+    if (!businessId) return { success: false, error: "Unauthorized" };
+
     const categories = await prisma.menuCategory.findMany({
+      where: { businessId },
       orderBy: { name: "asc" },
     });
     return { success: true, data: categories };
@@ -52,8 +65,17 @@ export async function getCategories() {
 
 export async function createMenuItem(data: MenuItemData) {
   try {
-    await checkAdmin();
+    const { businessId } = await checkAdmin();
     const validated = MenuItemSchema.parse(data);
+
+    // Verify category belongs to business
+    const category = await prisma.menuCategory.findFirst({
+        where: { id: validated.categoryId, businessId }
+    });
+
+    if (!category) {
+        return { success: false, error: "Invalid category" };
+    }
 
     await prisma.menuItem.create({
       data: validated,
@@ -70,8 +92,29 @@ export async function createMenuItem(data: MenuItemData) {
 
 export async function updateMenuItem(id: string, data: MenuItemData) {
   try {
-    await checkAdmin();
+    const { businessId } = await checkAdmin();
     const validated = MenuItemSchema.parse(data);
+
+     // Verify category belongs to business
+    const category = await prisma.menuCategory.findFirst({
+        where: { id: validated.categoryId, businessId }
+    });
+
+    if (!category) {
+        return { success: false, error: "Invalid category" };
+    }
+    
+    // Also verify item belongs to business (via category)
+    const item = await prisma.menuItem.findFirst({
+        where: { 
+            id,
+            category: { businessId }
+        }
+    });
+
+    if (!item) {
+         return { success: false, error: "Item not found or unauthorized" };
+    }
 
     await prisma.menuItem.update({
       where: { id },
@@ -89,7 +132,19 @@ export async function updateMenuItem(id: string, data: MenuItemData) {
 
 export async function deleteMenuItem(id: string) {
   try {
-    await checkAdmin();
+    const { businessId } = await checkAdmin();
+
+    // Verify item belongs to business
+    const item = await prisma.menuItem.findFirst({
+        where: { 
+            id,
+            category: { businessId }
+        }
+    });
+
+    if (!item) {
+         return { success: false, error: "Item not found or unauthorized" };
+    }
 
     await prisma.menuItem.delete({
       where: { id },
@@ -106,9 +161,12 @@ export async function deleteMenuItem(id: string) {
 
 export async function createCategory(name: string) {
     try {
-        await checkAdmin();
+        const { businessId } = await checkAdmin();
         const category = await prisma.menuCategory.create({
-            data: { name }
+            data: { 
+                name,
+                businessId
+            }
         });
         revalidatePath("/admin-menu");
         return { success: true, data: category };

@@ -21,7 +21,7 @@ const MenuItemSchema = z.object({
 type MenuFormData = z.infer<typeof MenuItemSchema>;
 
 interface MenuFormProps {
-  initialData?: any; // Using any to avoid complex type matching for now, ideally MenuItemWithCategory
+  initialData?: Partial<MenuFormData> & { id?: string };
   categories: { id: string; name: string }[];
   onSubmit: (data: MenuFormData) => Promise<void>;
   isLoading: boolean;

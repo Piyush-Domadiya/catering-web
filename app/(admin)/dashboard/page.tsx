@@ -1,3 +1,14 @@
+/**
+ * Admin Dashboard Page
+ * This is the main admin dashboard showing a complete business overview
+ *
+ * Features:
+ * - Business statistics (customers, events, staff)
+ * - Recent events list
+ * - Top event types
+ * - Calendar integration
+ * - Quick event creation/editing
+ */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -5,18 +16,20 @@ import { motion } from "framer-motion";
 import {
   Calendar,
   Users,
-  Utensils,
   TrendingUp,
   ArrowUpRight,
-  DollarSign,
   Briefcase,
   Star,
   Loader2,
   UserSquare2,
 } from "lucide-react";
 import EventDialog from "@/components/admin/EventDialog";
+import EventDetailDialog from "@/components/admin/EventDetailDialog";
+import AdminCalendar from "@/components/admin/AdminCalendar";
+import { Modal } from "@/components/shared/Modal";
 import Link from "next/link";
 
+// Structure for dashboard statistics
 interface DashboardStats {
   totalCustomers: number;
   totalEvents: number;
@@ -41,15 +54,36 @@ interface DashboardStats {
 }
 
 export default function DashboardPage() {
-  const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [selectedEvent, setSelectedEvent] = useState<any>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  // State management
+  const [stats, setStats] = useState<DashboardStats | null>(null); // Dashboard statistics
+  const [isLoading, setIsLoading] = useState(true); // Is data loading?
+  const [selectedEvent, setSelectedEvent] = useState<any>(null); // Selected event for editing
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // Event edit dialog state
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false); // Calendar view modal state
+  const [isDetailOpen, setIsDetailOpen] = useState(false); // Event detail view state
+  const [detailEvent, setDetailEvent] = useState<any>(null); // Event for detail view
+  const [allEvents, setAllEvents] = useState<any[]>([]); // All events for calendar
 
+  // Fetch data when page loads
   useEffect(() => {
     fetchStats();
+    fetchAllEvents();
   }, []);
 
+  // Fetch all events for the calendar
+  const fetchAllEvents = async () => {
+    try {
+      const res = await fetch("/api/events");
+      if (res.ok) {
+        const data = await res.json();
+        setAllEvents(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch all events", error);
+    }
+  };
+
+  // Fetch dashboard statistics from API
   const fetchStats = async () => {
     setIsLoading(true);
     try {
@@ -65,6 +99,7 @@ export default function DashboardPage() {
     }
   };
 
+  // Convert 24-hour time to 12-hour AM/PM format
   const formatTime = (time: string) => {
     if (!time) return "";
     const [hours, minutes] = time.split(":");
@@ -138,15 +173,24 @@ export default function DashboardPage() {
             Overview of your catering business performance.
           </p>
         </div>
-        <div className="flex items-center gap-3 bg-bg-primary/50 backdrop-blur-md p-2 rounded-2xl border border-border-color shadow-sm">
-          <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500">
-            <Calendar className="h-5 w-5" />
-          </div>
-          <div className="pr-4">
-            <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">
-              Current Period
-            </p>
-            <p className="text-sm font-bold text-text-primary">All Time</p>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setIsCalendarOpen(true)}
+            className="w-12 h-12 bg-bg-primary/50 backdrop-blur-md rounded-2xl border border-border-color shadow-sm flex items-center justify-center text-amber-500 hover:bg-bg-primary hover:scale-105 transition-all group"
+            title="Open Event Calendar"
+          >
+            <Calendar className="h-6 w-6 group-hover:scale-110 transition-transform" />
+          </button>
+          <div className="flex items-center gap-3 bg-bg-primary/50 backdrop-blur-md p-2 rounded-2xl border border-border-color shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500 font-bold text-xs">
+              AI
+            </div>
+            <div className="pr-4">
+              <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">
+                Current Period
+              </p>
+              <p className="text-sm font-bold text-text-primary">All Time</p>
+            </div>
           </div>
         </div>
       </div>
@@ -294,8 +338,8 @@ export default function DashboardPage() {
                             event.status === "UPCOMING"
                               ? "bg-amber-50 dark:bg-amber-500/10 text-amber-600"
                               : event.status === "COMPLETED"
-                              ? "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600"
-                              : "bg-[var(--bg-secondary)] text-[var(--text-muted)]"
+                                ? "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600"
+                                : "bg-[var(--bg-secondary)] text-[var(--text-muted)]"
                           }`}
                         >
                           {event.status}
@@ -325,10 +369,41 @@ export default function DashboardPage() {
           setSelectedEvent(null);
         }}
         onSuccess={() => {
-          // Refresh stats
           fetchStats();
+          fetchAllEvents();
         }}
         event={selectedEvent}
+      />
+
+      <Modal
+        isOpen={isCalendarOpen}
+        onClose={() => setIsCalendarOpen(false)}
+        title="Event Schedule"
+        maxWidth="max-w-7xl"
+      >
+        <div className="min-w-[80vw] md:min-w-[60vw]">
+          <AdminCalendar
+            events={allEvents}
+            onEventClick={(event) => {
+              setDetailEvent(event);
+              setIsDetailOpen(true);
+            }}
+          />
+        </div>
+      </Modal>
+
+      <EventDetailDialog
+        isOpen={isDetailOpen}
+        onClose={() => {
+          setIsDetailOpen(false);
+          setDetailEvent(null);
+        }}
+        onEdit={() => {
+          setSelectedEvent(detailEvent);
+          setIsDetailOpen(false);
+          setIsDialogOpen(true);
+        }}
+        event={detailEvent}
       />
     </div>
   );

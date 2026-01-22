@@ -1,16 +1,23 @@
 
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { getCurrentBusinessId } from "@/lib/auth-helpers";
 import { auth } from "@/auth";
 
 export async function GET() {
   try {
+     const businessId = await getCurrentBusinessId();
+
+    if (!businessId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
     const settings = await prisma.globalSettings.upsert({
-      where: { id: "settings" },
+      where: { businessId },
       update: {},
       create: {
-        id: "settings",
-        companyName: "Testful Affaire",
+        businessId,
+        companyName: "Testful Affaire", // Default name, should probably be dynamic based on business name
       },
     });
 
@@ -25,17 +32,18 @@ export async function PATCH(req: Request) {
   try {
     const session = await auth();
     const user = session?.user as any;
+    const businessId = await getCurrentBusinessId();
 
-    if (!user || user.role !== "ADMIN") {
+    if (!user || user.role !== "ADMIN" || !businessId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const body = await req.json();
     const settings = await prisma.globalSettings.upsert({
-      where: { id: "settings" },
+      where: { businessId },
       update: body,
       create: {
-        id: "settings",
+        businessId,
         ...body,
       },
     });

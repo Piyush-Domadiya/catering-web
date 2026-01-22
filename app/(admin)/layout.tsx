@@ -1,11 +1,11 @@
 "use client";
 
 import Sidebar from "@/components/admin/Sidebar";
-import { ThemeToggle } from "@/components/shared/ThemeToggle";
+import { HeaderActions } from "@/components/shared/HeaderActions";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function AdminLayout({
@@ -16,20 +16,20 @@ export default function AdminLayout({
   const { data: session, status } = useSession();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      redirect("/login");
-    }
-  }, [status]);
-
-  if (status === "loading") {
-    return null;
-  }
-
   const user = session?.user as any;
   const userName = user?.name || "User";
   const userRole = user?.role || "STAFF";
   const userInitial = userName.charAt(0).toUpperCase();
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      redirect("/login");
+    }
+    // Check if user is not an admin
+    if (status === "authenticated" && userRole !== "ADMIN") {
+      redirect("/my-events"); // Redirect non-admin to customer dashboard
+    }
+  }, [status, userRole]);
 
   return (
     <div className="flex min-h-screen bg-bg-secondary dark:bg-background transition-colors duration-500">
@@ -82,7 +82,7 @@ export default function AdminLayout({
           </div>
 
           <div className="flex items-center gap-3 md:gap-6">
-            <ThemeToggle />
+            <HeaderActions />
             <div className="text-right hidden sm:block">
               <p className="text-sm font-bold text-text-primary uppercase tracking-tight">
                 {userName}

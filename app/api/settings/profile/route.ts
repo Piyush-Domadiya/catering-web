@@ -5,7 +5,7 @@ import { auth } from "@/auth";
 export async function PATCH(req: Request) {
   try {
     const session = await auth();
-    if (!session || !session.user?.email) {
+    if (!session || !session.user?.id) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -18,7 +18,7 @@ export async function PATCH(req: Request) {
 
     // Check if email is already taken by another user
     if (email !== session.user.email) {
-      const existingUser = await prisma.user.findUnique({
+      const existingUser = await prisma.user.findFirst({
         where: { email },
       });
 
@@ -28,7 +28,7 @@ export async function PATCH(req: Request) {
     }
 
     const updatedUser = await prisma.user.update({
-      where: { email: session.user.email },
+      where: { id: session.user.id },
       data: {
         name,
         email,

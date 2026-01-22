@@ -1,9 +1,17 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { getCurrentBusinessId } from "@/lib/auth-helpers";
 
 export async function GET() {
   try {
+    const businessId = await getCurrentBusinessId();
+
+    if (!businessId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
     const customers = await prisma.customer.findMany({
+      where: { businessId },
       orderBy: { createdAt: "desc" },
       include: {
         _count: {
@@ -21,6 +29,12 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
+    const businessId = await getCurrentBusinessId();
+
+    if (!businessId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
     const { name, email, phone, address } = await req.json();
 
     if (!name || !phone) {
@@ -33,6 +47,7 @@ export async function POST(req: Request) {
         email,
         phone,
         address,
+        businessId,
       },
     });
 
@@ -40,7 +55,7 @@ export async function POST(req: Request) {
   } catch (error: any) {
     console.error("CREATE_CUSTOMER_ERROR", error);
     if (error.code === "P2002") {
-      return new NextResponse("Email already exists", { status: 400 });
+      return new NextResponse("Email already exists in your business", { status: 400 });
     }
     return new NextResponse("Internal server error", { status: 500 });
   }

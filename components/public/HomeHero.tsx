@@ -20,13 +20,13 @@ export function HomeHero() {
       </div>
 
       {/* Light Mode Abstract Background */}
-      <div className="absolute inset-0 z-0 opacity-100 dark:opacity-0 transition-opacity duration-700 bg-gradient-to-br from-bg-primary via-bg-secondary to-bg-tertiary/30">
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03]"></div>
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-b from-amber-200/20 to-transparent rounded-full blur-[100px] translate-x-1/2 -translate-y-1/2"></div>
+      <div className="absolute inset-0 z-0 opacity-100 dark:opacity-0 transition-opacity duration-700 bg-gradient-to-br from-bg-primary via-bg-secondary/40 to-bg-primary">
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.02]"></div>
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-gradient-to-b from-amber-200/20 to-transparent rounded-full blur-[130px] translate-x-1/2 -translate-y-1/2"></div>
       </div>
 
       {/* Gradient Mesh Overlay */}
-      <div className="absolute inset-0 z-[1] gradient-mesh opacity-30 dark:opacity-60 mix-blend-overlay dark:mix-blend-normal pointer-events-none"></div>
+      <div className="absolute inset-0 z-[1] gradient-mesh opacity-0 dark:opacity-60 mix-blend-multiply dark:mix-blend-normal pointer-events-none"></div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
@@ -35,29 +35,26 @@ export function HomeHero() {
           transition={{ duration: 0.8 }}
           className="max-w-3xl"
         >
-          <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-bg-secondary/80 text-amber-700 dark:text-amber-400 border border-border-color backdrop-blur-md shadow-sm">
+          <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-bg-secondary/90 text-amber-800 dark:text-amber-400 border border-border-color backdrop-blur-md shadow-sm">
             <Star className="h-4 w-4 fill-current" />
-            <span className="text-sm font-bold tracking-wide uppercase">
+            <span className="text-sm font-black tracking-widest uppercase">
               Premier Catering Services
             </span>
           </div>
-
-          <h1 className="text-6xl md:text-8xl font-bold leading-tight mb-8 text-text-primary tracking-tight">
+          <h1 className="text-6xl md:text-8xl font-black leading-tight mb-8 text-black dark:text-white tracking-tight">
             Making Every Event{" "}
             <span className="relative inline-block">
-              <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-amber-600 dark:from-amber-400 dark:to-amber-500">
+              <span className="relative z-10 text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-amber-700 dark:from-amber-400 dark:to-amber-500">
                 Testful
               </span>
               <span className="absolute bottom-2 left-0 w-full h-3 bg-amber-200/40 dark:bg-amber-500/20 -rotate-2 -z-0 rounded-full blur-sm"></span>
             </span>
           </h1>
-
-          <p className="text-xl md:text-2xl text-text-secondary mb-12 leading-relaxed max-w-2xl font-light">
+          <p className="text-xl md:text-2xl text-black dark:text-gray-100 mb-12 leading-relaxed max-w-2xl font-bold">
             Experience the pinnacle of culinary excellence. We provide bespoke
             catering solutions tailored to your unique taste, style, and
             moments.
           </p>
-
           <div className="flex flex-wrap gap-4">
             <Link
               href="/plan-menu"

@@ -38,13 +38,21 @@ function LoginForm() {
     setMessage("");
 
     const formData = new FormData(e.currentTarget);
-    const email = formData.get("email") as string;
+    const phone = formData.get("phone") as string;
     const password = formData.get("password") as string;
+
+    // Validate phone number
+    const phoneRegex = /^[6-9]\d{9}$/;
+    if (!phoneRegex.test(phone)) {
+      setError("Please enter a valid 10-digit phone number");
+      setIsLoading(false);
+      return;
+    }
 
     try {
       const result = await signIn("credentials", {
         redirect: false,
-        email,
+        phone,
         password,
       });
 
@@ -53,14 +61,14 @@ function LoginForm() {
       } else {
         const session = await getSession();
 
-        if ((session?.user as any)?.role === "ADMIN") {
+        if (session?.user?.role === "ADMIN") {
           router.push("/dashboard");
         } else {
-          router.push("/");
+          router.push("/my-events");
         }
         router.refresh();
       }
-    } catch (err) {
+    } catch (_err) {
       setError("An unexpected error occurred.");
     } finally {
       setIsLoading(false);
@@ -86,7 +94,7 @@ function LoginForm() {
               Welcome Back
             </h1>
             <p className="text-text-secondary font-medium">
-              Sign in to your account
+              Login to your account
             </p>
           </div>
 
@@ -105,14 +113,15 @@ function LoginForm() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
               <label className="text-sm font-bold text-text-secondary ml-1">
-                Email Address
+                Phone Number
               </label>
               <div className="relative">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted" />
                 <input
-                  name="email"
-                  type="email"
-                  placeholder="name@company.com"
+                  name="phone"
+                  type="tel"
+                  placeholder="9876543210"
+                  maxLength={10}
                   disabled={isLoading}
                   className="w-full pl-12 pr-4 py-4 rounded-2xl bg-bg-secondary border border-border-color focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 text-text-primary transition-all font-medium disabled:opacity-50"
                   required
@@ -164,11 +173,11 @@ function LoginForm() {
               {isLoading ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin" />
-                  Signing In...
+                  Logging in...
                 </>
               ) : (
                 <>
-                  Sign In
+                  Login
                   <ArrowRight className="h-5 w-5" />
                 </>
               )}
@@ -177,7 +186,7 @@ function LoginForm() {
 
           <div className="mt-10 pt-10 border-t border-border-color text-center transition-colors">
             <p className="text-text-secondary font-medium">
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
               <Link
                 href="/register"
                 className="text-amber-500 font-bold hover:text-amber-600 transition-colors"

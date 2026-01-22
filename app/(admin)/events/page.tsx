@@ -7,15 +7,18 @@ import {
   Calendar,
   MapPin,
   User,
-  MoreVertical,
-  Filter,
   Edit2,
   Trash2,
   Loader2,
+  Download,
+  Share2,
 } from "lucide-react";
 import EventDialog from "@/components/admin/EventDialog";
 import DeleteConfirmDialog from "@/components/admin/DeleteConfirmDialog";
 import StaffAssignmentDialog from "@/components/admin/StaffAssignmentDialog";
+import EventPhotoGallery from "@/components/admin/EventPhotoGallery";
+import { Image as ImageIcon } from "lucide-react";
+import { generateQuotePDF } from "@/lib/utils/generateQuotePDF";
 
 interface Event {
   id: string;
@@ -24,9 +27,17 @@ interface Event {
   location: string;
   type: string;
   status: string;
+  guestCount?: number | null;
+  perPlateCost?: number | null;
+  taxRate?: number | null;
+  discount?: number | null;
+  menuItems?: string | null;
+  isQuote?: boolean;
   customer: {
     id: string;
     name: string;
+    phone: string;
+    email?: string | null;
   };
   _count?: {
     staff: number;
@@ -39,11 +50,16 @@ export default function EventsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<any>(null);
+  const [settings, setSettings] = useState<any>(null);
   const [deleteDialog, setDeleteDialog] = useState<{
     isOpen: boolean;
     event: Event | null;
   }>({ isOpen: false, event: null });
   const [staffAssignmentDialog, setStaffAssignmentDialog] = useState<{
+    isOpen: boolean;
+    event: Event | null;
+  }>({ isOpen: false, event: null });
+  const [photoGalleryDialog, setPhotoGalleryDialog] = useState<{
     isOpen: boolean;
     event: Event | null;
   }>({ isOpen: false, event: null });
@@ -63,9 +79,95 @@ export default function EventsPage() {
     }
   };
 
+  const fetchSettings = async () => {
+    try {
+      const res = await fetch("/api/settings");
+      if (res.ok) {
+        const data = await res.json();
+        setSettings(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch settings", error);
+    }
+  };
+
   useEffect(() => {
     fetchEvents();
+    fetchSettings();
   }, []);
+
+  const handleDownloadQuote = (event: Event) => {
+    if (!settings) {
+      alert("Settings not loaded yet.");
+      return;
+    }
+    const eventData = {
+      ...event,
+      customer: {
+        name: event.customer.name,
+        phone: event.customer.phone,
+        email: event.customer.email,
+      },
+    };
+    const doc = generateQuotePDF(eventData as any, settings);
+    doc.save(`Quotation_${event.customer.name.replace(/\s+/g, "_")}.pdf`);
+  };
+
+  const handleShareQuote = async (event: Event) => {
+    const subtotal = (event.guestCount || 0) * (event.perPlateCost || 0);
+    const tax = (subtotal * (event.taxRate || 0)) / 100;
+    const total = subtotal + tax - (event.discount || 0);
+
+    const message = `*Quotation from ${settings?.companyName || "Catering Team"}*\n\nHello ${event.customer.name},\n\nAapka quotation PDF format me niche share kiya gaya hai.\n\n*Event:* ${event.name}\n*Total:* ₹${total.toLocaleString()}\n*Date:* ${new Date(event.date).toLocaleDateString()}\n\nPlease check the attached PDF for full details.`;
+
+    if (!settings) return;
+
+    const eventData = {
+      ...event,
+      customer: {
+        name: event.customer.name,
+        phone: event.customer.phone,
+        email: event.customer.email,
+      },
+    };
+
+    // Check if we can share files (reliably mobile)
+    const canShareFiles =
+      typeof navigator !== "undefined" &&
+      !!navigator.share &&
+      !!navigator.canShare &&
+      navigator.canShare({
+        files: [new File([], "test.pdf", { type: "application/pdf" })],
+      });
+
+    if (
+      canShareFiles &&
+      /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+    ) {
+      try {
+        const doc = generateQuotePDF(eventData as any, settings);
+        const pdfBlob = doc.output("blob");
+        const fileName = `Quotation_${event.customer.name.replace(/\s+/g, "_")}.pdf`;
+        const file = new File([pdfBlob], fileName, { type: "application/pdf" });
+
+        await navigator.share({
+          files: [file],
+          title: "Quotation PDF",
+          text: message,
+        });
+        return;
+      } catch (error) {
+        console.error("Error sharing PDF:", error);
+      }
+    }
+
+    // Laptop Fallback: Pehale jese (Just Text Redirection)
+    const encodedMessage = encodeURIComponent(message);
+    window.open(
+      `https://wa.me/${event.customer.phone.replace(/\D/g, "")}?text=${encodedMessage}`,
+      "_blank",
+    );
+  };
 
   const handleAddEvent = () => {
     setEditingEvent(null);
@@ -81,6 +183,12 @@ export default function EventsPage() {
       type: event.type,
       customerId: event.customer.id,
       status: event.status,
+      guestCount: event.guestCount,
+      perPlateCost: event.perPlateCost,
+      taxRate: event.taxRate,
+      discount: event.discount,
+      menuItems: event.menuItems,
+      isQuote: event.isQuote,
     });
     setIsDialogOpen(true);
   };
@@ -101,7 +209,7 @@ export default function EventsPage() {
     (e) =>
       e.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       e.customer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      e.location.toLowerCase().includes(searchQuery.toLowerCase())
+      e.location.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   return (
@@ -154,35 +262,69 @@ export default function EventsPage() {
                     className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${
                       event.status === "UPCOMING"
                         ? "bg-amber-50 dark:bg-amber-500/10 text-amber-600"
-                        : event.status === "COMPLETED"
-                        ? "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600"
-                        : "bg-red-50 dark:bg-red-500/10 text-red-600"
+                        : event.status === "QUOTATION"
+                          ? "bg-blue-50 dark:bg-blue-500/10 text-blue-600"
+                          : event.status === "COMPLETED"
+                            ? "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600"
+                            : "bg-red-50 dark:bg-red-500/10 text-red-600"
                     }`}
                   >
                     {event.status}
                   </div>
                   <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                     <button
+                      onClick={() => handleDownloadQuote(event)}
+                      className="p-2 hover:bg-bg-tertiary text-text-secondary rounded-xl transition-colors"
+                      title="Download Quote PDF"
+                    >
+                      <Download className="h-4 w-4" />
+                    </button>
+                    <button
+                      onClick={() => handleShareQuote(event)}
+                      className="p-2 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 text-emerald-600 rounded-xl transition-colors"
+                      title="Share via WhatsApp"
+                    >
+                      <Share2 className="h-4 w-4" />
+                    </button>
+                    <button
+                      onClick={() =>
+                        setPhotoGalleryDialog({ isOpen: true, event })
+                      }
+                      className="p-2 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 text-emerald-600 rounded-xl transition-colors"
+                      title="Manage Photos"
+                    >
+                      <ImageIcon className="h-4 w-4" />
+                    </button>
+                    <button
                       onClick={() => handleEditEvent(event)}
                       className="p-2 hover:bg-amber-50 dark:hover:bg-amber-500/10 text-amber-600 rounded-xl transition-colors"
+                      title="Edit Event"
                     >
                       <Edit2 className="h-4 w-4" />
                     </button>
                     <button
                       onClick={() => setDeleteDialog({ isOpen: true, event })}
                       className="p-2 hover:bg-red-50 dark:hover:bg-red-500/10 text-red-600 rounded-xl transition-colors"
+                      title="Delete Event"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
                   </div>
                 </div>
 
-                <h3 className="text-xl font-bold text-text-primary mb-2 truncate group-hover:text-amber-600 transition-colors">
+                <h3 className="text-xl font-bold text-text-primary mb-2 truncate group-hover:text-amber-600 transition-colors flex items-center gap-2">
                   {event.name}
                 </h3>
-                <p className="text-xs font-bold text-text-muted uppercase tracking-widest mb-6">
-                  {event.type}
-                </p>
+                <div className="flex items-center gap-2 mb-6">
+                  <p className="text-xs font-bold text-text-muted uppercase tracking-widest">
+                    {event.type}
+                  </p>
+                  {!event.perPlateCost && (
+                    <span className="px-2 py-0.5 bg-blue-50 dark:bg-blue-500/10 text-blue-600 text-[9px] font-bold uppercase tracking-wider rounded-full">
+                      Customer Created
+                    </span>
+                  )}
+                </div>
 
                 <div className="space-y-4">
                   <div className="flex items-center gap-3 text-sm text-text-secondary font-medium">
@@ -259,6 +401,15 @@ export default function EventsPage() {
           }}
           eventId={staffAssignmentDialog.event.id}
           eventName={staffAssignmentDialog.event.name}
+        />
+      )}
+
+      {photoGalleryDialog.event && (
+        <EventPhotoGallery
+          isOpen={photoGalleryDialog.isOpen}
+          onClose={() => setPhotoGalleryDialog({ isOpen: false, event: null })}
+          eventId={photoGalleryDialog.event.id}
+          eventName={photoGalleryDialog.event.name}
         />
       )}
     </div>

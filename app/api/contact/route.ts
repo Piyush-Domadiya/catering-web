@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { getCurrentBusinessId } from "@/lib/auth-helpers";
 
 export async function POST(req: Request) {
   try {
+    const body = await req.json();
     const {
       name,
       email,
@@ -12,12 +14,31 @@ export async function POST(req: Request) {
       eventDate,
       venueLocation,
       message,
-    } = await req.json();
+      businessId, // Optional in body, fallback to default if not provided
+    } = body;
 
     if (!name || !email || !phone || !eventType) {
       return new NextResponse("Name, email, phone, and event type are required", {
         status: 400,
       });
+    }
+
+    // Determine target business
+    let targetBusinessId = businessId;
+    if (!targetBusinessId) {
+         // Fallback: If logged in, use user's business. 
+         // If public/anonymous, pick first business (Demo) for now.
+         const userBusinessId = await getCurrentBusinessId();
+         if (userBusinessId) {
+             targetBusinessId = userBusinessId;
+         } else {
+             const defaultBusiness = await prisma.business.findFirst();
+             targetBusinessId = defaultBusiness?.id;
+         }
+    }
+
+    if (!targetBusinessId) {
+        return new NextResponse("Business ID required", { status: 400 });
     }
 
     const inquiry = await prisma.contactInquiry.create({
@@ -31,6 +52,7 @@ export async function POST(req: Request) {
         venueLocation,
         message,
         status: "NEW",
+        businessId: targetBusinessId
       },
     });
 
@@ -43,7 +65,13 @@ export async function POST(req: Request) {
 
 export async function GET() {
   try {
+    const businessId = await getCurrentBusinessId();
+    if (!businessId) {
+        return new NextResponse("Unauthorized", { status: 401 });
+    }
+
     const inquiries = await prisma.contactInquiry.findMany({
+      where: { businessId },
       orderBy: { createdAt: "desc" },
     });
 

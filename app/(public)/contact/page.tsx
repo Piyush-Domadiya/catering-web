@@ -32,6 +32,7 @@ export default function ContactPage() {
     const data = {
       name: formData.get("name") as string,
       email: formData.get("email") as string,
+      phone: formData.get("phone") as string, // Added phone field
       eventType: formData.get("eventType") as string,
       guestCount: formData.get("guestCount") as string,
       eventDate: formData.get("eventDate") as string,
@@ -51,7 +52,7 @@ export default function ContactPage() {
       }
 
       setIsSuccess(true);
-    } catch (err) {
+    } catch (_err) {
       setError("Failed to send inquiry. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -239,6 +240,18 @@ export default function ContactPage() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2 group">
                           <label className="text-sm font-bold text-text-secondary ml-1 uppercase tracking-wider text-[10px]">
+                            Phone Number
+                          </label>
+                          <input
+                            required
+                            name="phone"
+                            type="tel"
+                            placeholder="+91 99999 99999"
+                            className="w-full px-6 py-4 rounded-2xl bg-bg-secondary border border-border-color focus:bg-bg-primary focus:border-amber-500 focus:outline-none transition-all font-medium text-text-primary placeholder:text-text-muted backdrop-blur-sm"
+                          />
+                        </div>
+                        <div className="space-y-2 group">
+                          <label className="text-sm font-bold text-text-secondary ml-1 uppercase tracking-wider text-[10px]">
                             Event Type
                           </label>
                           <div className="relative">
@@ -271,6 +284,9 @@ export default function ContactPage() {
                             </div>
                           </div>
                         </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2 group">
                           <label className="text-sm font-bold text-text-secondary ml-1 uppercase tracking-wider text-[10px]">
                             Approx. Guest Count
@@ -285,9 +301,6 @@ export default function ContactPage() {
                             />
                           </div>
                         </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2 group">
                           <label className="text-sm font-bold text-text-secondary ml-1 uppercase tracking-wider text-[10px]">
                             Event Date
@@ -301,19 +314,20 @@ export default function ContactPage() {
                             />
                           </div>
                         </div>
-                        <div className="space-y-2 group">
-                          <label className="text-sm font-bold text-text-secondary ml-1 uppercase tracking-wider text-[10px]">
-                            Venue Location
-                          </label>
-                          <div className="relative">
-                            <MapPin className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-amber-500 transition-colors" />
-                            <input
-                              name="venueLocation"
-                              type="text"
-                              placeholder="City / Area"
-                              className="w-full pl-14 pr-6 py-4 rounded-2xl bg-bg-secondary border border-border-color focus:bg-bg-primary focus:border-amber-500 focus:outline-none transition-all font-medium text-text-primary placeholder:text-text-muted backdrop-blur-sm"
-                            />
-                          </div>
+                      </div>
+
+                      <div className="space-y-2 group">
+                        <label className="text-sm font-bold text-text-secondary ml-1 uppercase tracking-wider text-[10px]">
+                          Venue Location
+                        </label>
+                        <div className="relative">
+                          <MapPin className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 group-focus-within:text-amber-500 transition-colors" />
+                          <input
+                            name="venueLocation"
+                            type="text"
+                            placeholder="City / Area"
+                            className="w-full pl-14 pr-6 py-4 rounded-2xl bg-bg-secondary border border-border-color focus:bg-bg-primary focus:border-amber-500 focus:outline-none transition-all font-medium text-text-primary placeholder:text-text-muted backdrop-blur-sm"
+                          />
                         </div>
                       </div>
 

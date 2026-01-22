@@ -1,21 +1,33 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { getCurrentBusinessId } from "@/lib/auth-helpers";
 
 export async function GET() {
   try {
+    const businessId = await getCurrentBusinessId();
+
+    if (!businessId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
     // Get counts
     const [customerCount, eventCount, staffCount, upcomingEventsCount] =
       await Promise.all([
-        prisma.customer.count(),
-        prisma.event.count(),
-        prisma.staff.count(),
-        prisma.event.count({ where: { status: "UPCOMING" } }),
+        prisma.customer.count({ where: { businessId } }),
+        prisma.event.count({ where: { businessId } }),
+        prisma.staff.count({ where: { businessId } }),
+        prisma.event.count({ where: { status: "UPCOMING", businessId } }),
       ]);
+
+   const completedEventsCount = await prisma.event.count({
+        where: { status: "COMPLETED", businessId },
+   });
 
     // Get recent events
     const recentEvents = await prisma.event.findMany({
       where: {
         status: "UPCOMING",
+        businessId,
       },
       take: 5,
       orderBy: { createdAt: "desc" },
@@ -31,6 +43,7 @@ export async function GET() {
     // Get event type stats
     const eventTypeStats = await prisma.event.groupBy({
       by: ["type"],
+      where: { businessId },
       _count: {
         type: true,
       },
@@ -48,13 +61,11 @@ export async function GET() {
       totalEvents: eventCount,
       totalStaff: staffCount,
       upcomingEvents: upcomingEventsCount,
-      completedEvents: await prisma.event.count({
-        where: { status: "COMPLETED" },
-      }),
+      completedEvents: completedEventsCount,
       recentEvents: recentEvents.map((event) => ({
         id: event.id,
         name: event.name,
-        customer: event.customer.name,
+        customer: event.customer?.name || "Unknown",
         customerId: event.customerId,
         date: event.date,
         time: event.time,
@@ -64,7 +75,7 @@ export async function GET() {
       })),
       topEventTypes: eventTypeStats.map((stat) => ({
         type: stat.type,
-        count: stat._count.type,
+        count: stat._count?.type || 0,
       })),
     };
 

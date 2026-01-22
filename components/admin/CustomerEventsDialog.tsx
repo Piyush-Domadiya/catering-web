@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { X, Calendar, MapPin, Loader2, Clock } from "lucide-react";
 
 interface Event {
@@ -32,14 +32,8 @@ export default function CustomerEventsDialog({
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    if (isOpen && customerId) {
-      fetchCustomerEvents();
-    }
-  }, [isOpen, customerId]);
-
   // Fetch the list of events for the selected customer when the dialog opens
-  const fetchCustomerEvents = async () => {
+  const fetchCustomerEvents = useCallback(async () => {
     if (!customerId) return;
     setIsLoading(true);
     try {
@@ -53,7 +47,13 @@ export default function CustomerEventsDialog({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [customerId]);
+
+  useEffect(() => {
+    if (isOpen && customerId) {
+      fetchCustomerEvents();
+    }
+  }, [isOpen, customerId, fetchCustomerEvents]);
 
   if (!isOpen) return null;
 
@@ -103,8 +103,8 @@ export default function CustomerEventsDialog({
                         event.status === "COMPLETED"
                           ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400"
                           : event.status === "CANCELLED"
-                          ? "bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400"
-                          : "bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400"
+                            ? "bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400"
+                            : "bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-400"
                       }`}
                     >
                       {event.status}

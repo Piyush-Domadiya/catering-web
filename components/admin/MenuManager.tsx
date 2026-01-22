@@ -22,15 +22,29 @@ import { MenuForm } from "@/components/admin/MenuForm";
 import { useRouter } from "next/navigation";
 import CategoryManagerDialog from "@/components/admin/CategoryManagerDialog";
 
+interface MenuItem {
+  id: string;
+  name: string;
+  description: string | null;
+  price: number;
+  categoryId: string;
+  category: {
+    id: string;
+    name: string;
+  };
+  image: string | null;
+  available: boolean;
+}
+
 interface MenuManagerProps {
-  initialItems: any[];
-  categories: any[];
+  initialItems: MenuItem[];
+  categories: { id: string; name: string }[];
 }
 
 export function MenuManager({ initialItems, categories }: MenuManagerProps) {
-  const [items, setItems] = useState(initialItems);
+  const [items, setItems] = useState<MenuItem[]>(initialItems);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingItem, setEditingItem] = useState<any>(null);
+  const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [isCategoryManagerOpen, setIsCategoryManagerOpen] = useState(false);
@@ -39,7 +53,7 @@ export function MenuManager({ initialItems, categories }: MenuManagerProps) {
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredItems = items.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    item.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const handleOpenAdd = () => {
@@ -233,7 +247,8 @@ export function MenuManager({ initialItems, categories }: MenuManagerProps) {
               {filteredItems.length === 0 && (
                 <tr>
                   <td colSpan={5} className="text-center py-10 text-text-muted">
-                    No items found. Click "Add New Item" to create one.
+                    No items found. Click &quot;Add New Item&quot; to create
+                    one.
                   </td>
                 </tr>
               )}

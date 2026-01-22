@@ -3,7 +3,14 @@
 import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
 
-const testimonials = [
+interface Testimonial {
+  name: string;
+  role: string;
+  content: string;
+  rating: number;
+}
+
+const testimonials: Testimonial[] = [
   {
     name: "Sarah Jenkins",
     role: "Event Planner, TechCorp",
@@ -64,7 +71,7 @@ export function HomeTestimonials() {
             </div>
 
             <p className="text-text-secondary italic mb-8 relative z-10 leading-relaxed font-medium">
-              "{t.content}"
+              &quot;{t.content}&quot;
             </p>
 
             <div className="flex items-center gap-4">

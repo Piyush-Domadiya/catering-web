@@ -9,7 +9,6 @@ import {
   CheckCircle2,
   AlertTriangle,
 } from "lucide-react";
-import { motion } from "framer-motion";
 
 export default function BackupPage() {
   const [isBackingUp, setIsBackingUp] = useState(false);

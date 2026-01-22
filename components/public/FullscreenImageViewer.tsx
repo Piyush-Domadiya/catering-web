@@ -66,16 +66,19 @@ export function FullscreenImageViewer({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-sm"
+          className="fixed top-20 inset-x-0 bottom-0 z-[1000] flex items-center justify-center bg-black/95 backdrop-blur-sm cursor-zoom-out"
           onClick={onClose}
         >
           {/* Close Button */}
           <button
-            onClick={onClose}
-            className="absolute top-4 right-4 z-50 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-200 hover:scale-110"
+            onClick={(e) => {
+              e.stopPropagation();
+              onClose();
+            }}
+            className="absolute top-4 right-6 z-[1010] p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-200 hover:scale-110 shadow-xl"
             aria-label="Close fullscreen viewer"
           >
-            <X className="h-6 w-6" />
+            <X className="h-8 w-8" />
           </button>
 
           {/* Previous Button */}
@@ -112,7 +115,7 @@ export function FullscreenImageViewer({
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="relative w-full h-full max-w-7xl max-h-[90vh] mx-4"
+            className="relative w-full h-full max-w-7xl max-h-[85vh] mx-4 flex items-center justify-center cursor-default"
             onClick={(e) => e.stopPropagation()}
           >
             <Image
