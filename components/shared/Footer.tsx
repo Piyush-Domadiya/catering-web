@@ -25,11 +25,11 @@ export default function Footer() {
                 <Utensils className="h-6 w-6 text-white" />
               </div>
               <span className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent group-hover:from-amber-600 group-hover:to-amber-800 dark:group-hover:from-amber-400 dark:group-hover:to-amber-600 transition-all duration-300">
-                Testful Affaire
+                Tasteful Affaire
               </span>
             </div>
             <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">
-              Making every event testful with our premium catering services.
+              Making every event tasteful with our premium catering services.
               From weddings to corporate events, we bring the best flavors to
               your table.
             </p>
@@ -81,7 +81,7 @@ export default function Footer() {
                     <span className="w-1.5 h-1.5 rounded-full bg-amber-500 opacity-0 group-hover:opacity-100 transition-opacity"></span>
                     {item}
                   </li>
-                )
+                ),
               )}
             </ul>
           </div>
@@ -96,7 +96,7 @@ export default function Footer() {
                   <Mail className="h-4 w-4 text-amber-600 dark:text-amber-500" />
                 </div>
                 <span className="mt-1.5 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
-                  info@testfulaffaire.com
+                  info@tastefulaffaire.com
                 </span>
               </li>
               <li className="flex items-start gap-4 group">
@@ -120,7 +120,7 @@ export default function Footer() {
         </div>
         <div className="mt-16 pt-8 border-t border-gray-100 dark:border-white/5 text-center text-sm text-gray-500 dark:text-gray-500 flex flex-col md:flex-row justify-between items-center gap-4">
           <p>
-            © {new Date().getFullYear()} Testful Affaire Catering. All rights
+            © {new Date().getFullYear()} Tasteful Affaire Catering. All rights
             reserved.
           </p>
           <div className="flex gap-6">

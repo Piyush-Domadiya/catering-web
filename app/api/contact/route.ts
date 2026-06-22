@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getCurrentBusinessId } from "@/lib/auth-helpers";
+import { notifyInquiryReceived } from "@/lib/notifications";
 
 export async function POST(req: Request) {
   try {
@@ -17,8 +18,8 @@ export async function POST(req: Request) {
       businessId, // Optional in body, fallback to default if not provided
     } = body;
 
-    if (!name || !email || !phone || !eventType) {
-      return new NextResponse("Name, email, phone, and event type are required", {
+    if (!name || !phone || !eventType) {
+      return new NextResponse("Name, phone, and event type are required", {
         status: 400,
       });
     }
@@ -55,6 +56,20 @@ export async function POST(req: Request) {
         businessId: targetBusinessId
       },
     });
+
+    // Notify Admin
+    // We don't await this to avoid blocking the response
+    const business = await prisma.business.findUnique({
+        where: { id: targetBusinessId },
+        select: { name: true }
+    });
+
+    notifyInquiryReceived(
+        business?.name || "Catering Service",
+        name,
+        phone,
+        targetBusinessId
+    ).catch((err: unknown) => console.error("Failed to send inquiry notification:", err));
 
     return NextResponse.json(inquiry);
   } catch (error) {

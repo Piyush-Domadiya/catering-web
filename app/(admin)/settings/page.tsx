@@ -9,11 +9,15 @@ import {
   Save,
   ShieldCheck,
   Loader2,
+  Home,
+  MessageSquare,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { BusinessInfoForm } from "@/components/admin/BusinessInfoForm";
+import { TestimonialManager } from "@/components/admin/TestimonialManager";
+import { HomepageSettingsForm } from "@/components/admin/HomepageSettingsForm";
 
 export default function SettingsPage() {
   const { data: session, update } = useSession();
@@ -116,6 +120,8 @@ export default function SettingsPage() {
     { id: "profile", name: "My Profile", icon: User },
     { id: "security", name: "Security", icon: Lock },
     { id: "business", name: "Business Info", icon: Building },
+    { id: "homepage", name: "Homepage", icon: Home },
+    { id: "testimonials", name: "Testimonials", icon: MessageSquare },
     { id: "notifications", name: "Notifications", icon: Bell },
   ];
 
@@ -384,6 +390,18 @@ export default function SettingsPage() {
               {activeTab === "business" && (
                 <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
                   <BusinessInfoForm />
+                </div>
+              )}
+
+              {activeTab === "homepage" && (
+                <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
+                  <HomepageSettingsForm />
+                </div>
+              )}
+
+              {activeTab === "testimonials" && (
+                <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
+                  <TestimonialManager />
                 </div>
               )}
 

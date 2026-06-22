@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getCurrentBusinessId } from "@/lib/auth-helpers";
+import { sendNotification } from "@/lib/notifications";
 
 export async function GET(
   req: Request,
@@ -97,6 +98,34 @@ export async function PATCH(
         customer: true,
       },
     });
+
+    // Notify Customer on significant status change
+    if (status && status !== existingEvent.status) {
+        const business = await prisma.business.findUnique({
+            where: { id: businessId },
+            select: { name: true }
+        });
+
+        const customer = await prisma.customer.findUnique({
+            where: { id: existingEvent.customerId },
+            select: { name: true, phone: true }
+        });
+
+        if (customer) {
+            let msgBody = `Hello ${customer.name}, the status of your event "${existingEvent.name}" has been updated to ${status}.`;
+            if (status === "QUOTATION") msgBody = `Hello ${customer.name}, a quotation has been prepared for your event "${existingEvent.name}". Please check your dashboard.`;
+            if (status === "CONFIRMED" || status === "UPCOMING") msgBody = `Hello ${customer.name}, your event "${existingEvent.name}" is now confirmed!`;
+
+           sendNotification({
+                to: customer.phone,
+                subject: "Event Update",
+                body: msgBody,
+                type: "WHATSAPP",
+                businessId,
+                alertType: "INFO"
+            }).catch((err: unknown) => console.error("Failed to notify customer of event update:", err));
+        }
+    }
 
     return NextResponse.json(event);
   } catch (error: any) {

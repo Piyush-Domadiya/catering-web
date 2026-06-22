@@ -58,7 +58,7 @@ export default function Sidebar({ onClose }: { onClose?: () => void }) {
                 <Utensils className="h-5 w-5 text-white" />
               </div>
               <span className="text-text-primary font-bold text-xl truncate">
-                Testful
+                Tasteful
               </span>
             </motion.div>
           )}

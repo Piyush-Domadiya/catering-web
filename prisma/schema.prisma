@@ -32,6 +32,8 @@ model Business {
   contactInquiries ContactInquiry[]
   settings         GlobalSettings?
   notifications    Notification[]
+  testimonials     Testimonial[]
+  reviews          Review[]
 }
 
 model User {
@@ -83,6 +85,7 @@ model MenuItem {
   categoryId  String
   image       String?
   available   Boolean      @default(true)
+  reviews     Review[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 }
@@ -185,18 +188,43 @@ model Highlight {
   updatedAt  DateTime @updatedAt
 }
 
+
+
+model Testimonial {
+  id         String   @id @default(cuid())
+  name       String
+  role       String
+  content    String
+  rating     Int      @default(5)
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
 model GlobalSettings {
-  id             String   @id @default(cuid())
-  companyName    String   @default("Testful Affaire")
-  contactEmail   String?
-  contactPhone   String?
-  whatsappNumber String?
-  address        String?
-  facebookUrl    String?
-  instagramUrl   String?
-  businessId     String   @unique
-  business       Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
-  updatedAt      DateTime @updatedAt
+  id               String   @id @default(cuid())
+  companyName      String   @default("Tasteful Affaire")
+  contactEmail     String?
+  contactPhone     String?
+  whatsappNumber   String?
+  address          String?
+  facebookUrl      String?
+  instagramUrl     String?
+  
+  // Homepage - Hero
+  heroTitle        String?
+  heroSubtitle     String?
+  heroImage        String?
+  
+  // Homepage - About
+  aboutTitle       String?
+  aboutDescription String?
+  aboutImage       String?
+
+  businessId       String   @unique
+  business         Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  updatedAt        DateTime @updatedAt
 }
 
 model Notification {
@@ -207,6 +235,30 @@ model Notification {
   read       Boolean  @default(false)
   userId     String?
   user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  businessId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Otp {
+  id        String   @id @default(cuid())
+  phone     String
+  code      String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([phone])
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  name       String
+  phone      String
+  content    String?
+  rating     Int      @default(5)
+  itemId     String
+  item       MenuItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
   businessId String
   business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
   createdAt  DateTime @default(now())

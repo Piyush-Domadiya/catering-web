@@ -17,7 +17,7 @@ export async function GET() {
       update: {},
       create: {
         businessId,
-        companyName: "Testful Affaire", // Default name, should probably be dynamic based on business name
+        companyName: "Tasteful Affaire", // Default name, should probably be dynamic based on business name
       },
     });
 

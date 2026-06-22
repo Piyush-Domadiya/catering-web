@@ -65,7 +65,7 @@ export default function Navbar() {
               <Utensils className="h-6 w-6 text-white" />
             </div>
             <span className="text-2xl font-bold bg-gradient-to-r from-text-primary to-text-secondary bg-clip-text text-transparent group-hover:from-amber-600 group-hover:to-amber-800 dark:group-hover:from-amber-400 dark:group-hover:to-amber-600 transition-all duration-300">
-              Testful Affaire
+              Tasteful Affaire
             </span>
           </Link>
 
@@ -148,81 +148,103 @@ export default function Navbar() {
 
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-bg-primary/95 backdrop-blur-md border-b border-border-color overflow-hidden"
-          >
-            <div className="px-4 pt-2 pb-6 space-y-2">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className={`block px-4 py-3 text-base font-medium rounded-xl transition-all ${
-                    pathname === link.href
-                      ? "bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400"
-                      : "text-text-secondary hover:bg-bg-secondary"
-                  }`}
-                >
-                  {link.name}
-                </Link>
-              ))}
+          <>
+            {/* Backdrop Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsOpen(false)}
+              className="md:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
+            />
 
-              <div className="pt-4 mt-4 border-t border-border-color flex flex-col gap-3">
-                {status === "authenticated" ? (
-                  <>
-                    {session.user.role === "ADMIN" ? (
-                      <Link
-                        href="/dashboard"
-                        onClick={() => setIsOpen(false)}
-                        className="flex items-center gap-2 w-full bg-text-primary text-bg-primary px-5 py-3 rounded-xl justify-center font-medium"
-                      >
-                        <LayoutDashboard className="h-4 w-4" />
-                        Dashboard
-                      </Link>
-                    ) : (
-                      <Link
-                        href="/my-events"
-                        onClick={() => setIsOpen(false)}
-                        className="flex items-center gap-2 w-full bg-text-primary text-bg-primary px-5 py-3 rounded-xl justify-center font-medium"
-                      >
-                        <LayoutDashboard className="h-4 w-4" />
-                        My Events
-                      </Link>
-                    )}
-                    <button
-                      onClick={() => signOut()}
-                      className="flex items-center gap-2 w-full bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 px-5 py-3 rounded-xl justify-center font-medium"
-                    >
-                      <LogOut className="h-4 w-4" />
-                      Logout
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <Link
-                      href="/login"
-                      onClick={() => setIsOpen(false)}
-                      className="flex items-center gap-2 w-full bg-gradient-to-r from-amber-500 to-amber-600 text-white px-5 py-3 rounded-xl text-center justify-center font-bold glow-amber"
-                    >
-                      <LogIn className="h-4 w-4" />
-                      Login
-                    </Link>
-                    <Link
-                      href="/register"
-                      onClick={() => setIsOpen(false)}
-                      className="flex items-center gap-2 w-full border border-border-color text-text-secondary px-5 py-3 rounded-xl text-center justify-center font-medium hover:bg-bg-secondary"
-                    >
-                      <User className="h-4 w-4" />
-                      Register
-                    </Link>
-                  </>
-                )}
+            {/* Side Drawer */}
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed top-0 right-0 bottom-0 w-[80%] max-w-sm bg-bg-primary shadow-2xl z-50 md:hidden flex flex-col pt-24"
+            >
+              <div className="absolute top-6 right-6">
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="text-text-secondary p-2 hover:bg-bg-secondary rounded-full transition-colors"
+                >
+                  <X />
+                </button>
               </div>
-            </div>
-          </motion.div>
+
+              <div className="px-6 space-y-2 overflow-y-auto flex-grow">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className={`block px-4 py-4 text-lg font-bold rounded-xl transition-all ${
+                      pathname === link.href
+                        ? "bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                        : "text-text-secondary hover:bg-bg-secondary"
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
+                ))}
+
+                <div className="pt-6 mt-6 border-t border-border-color flex flex-col gap-4">
+                  {status === "authenticated" ? (
+                    <>
+                      {session.user.role === "ADMIN" ? (
+                        <Link
+                          href="/dashboard"
+                          onClick={() => setIsOpen(false)}
+                          className="flex items-center gap-2 w-full bg-text-primary text-bg-primary px-5 py-4 rounded-xl justify-center font-bold"
+                        >
+                          <LayoutDashboard className="h-5 w-5" />
+                          Dashboard
+                        </Link>
+                      ) : (
+                        <Link
+                          href="/my-events"
+                          onClick={() => setIsOpen(false)}
+                          className="flex items-center gap-2 w-full bg-text-primary text-bg-primary px-5 py-4 rounded-xl justify-center font-bold"
+                        >
+                          <LayoutDashboard className="h-5 w-5" />
+                          My Events
+                        </Link>
+                      )}
+                      <button
+                        onClick={() => signOut()}
+                        className="flex items-center gap-2 w-full bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 px-5 py-4 rounded-xl justify-center font-bold"
+                      >
+                        <LogOut className="h-5 w-5" />
+                        Logout
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        href="/login"
+                        onClick={() => setIsOpen(false)}
+                        className="flex items-center gap-2 w-full bg-gradient-to-r from-amber-500 to-amber-600 text-white px-5 py-4 rounded-xl text-center justify-center font-bold glow-amber shadow-lg shadow-amber-500/20"
+                      >
+                        <LogIn className="h-5 w-5" />
+                        Login
+                      </Link>
+                      <Link
+                        href="/register"
+                        onClick={() => setIsOpen(false)}
+                        className="flex items-center gap-2 w-full border-2 border-border-color text-text-secondary px-5 py-4 rounded-xl text-center justify-center font-bold hover:bg-bg-secondary transition-colors"
+                      >
+                        <User className="h-5 w-5" />
+                        Register
+                      </Link>
+                    </>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </nav>

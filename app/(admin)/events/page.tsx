@@ -12,8 +12,10 @@ import {
   Loader2,
   Download,
   Share2,
+  Eye,
 } from "lucide-react";
 import EventDialog from "@/components/admin/EventDialog";
+import EventDetailDialog from "@/components/admin/EventDetailDialog";
 import DeleteConfirmDialog from "@/components/admin/DeleteConfirmDialog";
 import StaffAssignmentDialog from "@/components/admin/StaffAssignmentDialog";
 import EventPhotoGallery from "@/components/admin/EventPhotoGallery";
@@ -50,6 +52,8 @@ export default function EventsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<any>(null);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [detailEvent, setDetailEvent] = useState<any>(null);
   const [settings, setSettings] = useState<any>(null);
   const [deleteDialog, setDeleteDialog] = useState<{
     isOpen: boolean;
@@ -296,6 +300,16 @@ export default function EventsPage() {
                       <ImageIcon className="h-4 w-4" />
                     </button>
                     <button
+                      onClick={() => {
+                        setDetailEvent(event);
+                        setIsDetailOpen(true);
+                      }}
+                      className="p-2 hover:bg-blue-50 dark:hover:bg-blue-500/10 text-blue-600 rounded-xl transition-colors"
+                      title="View Details"
+                    >
+                      <Eye className="h-4 w-4" />
+                    </button>
+                    <button
                       onClick={() => handleEditEvent(event)}
                       className="p-2 hover:bg-amber-50 dark:hover:bg-amber-500/10 text-amber-600 rounded-xl transition-colors"
                       title="Edit Event"
@@ -412,6 +426,20 @@ export default function EventsPage() {
           eventName={photoGalleryDialog.event.name}
         />
       )}
+
+      <EventDetailDialog
+        isOpen={isDetailOpen}
+        onClose={() => {
+          setIsDetailOpen(false);
+          setDetailEvent(null);
+        }}
+        onEdit={() => {
+          setEditingEvent(detailEvent);
+          setIsDetailOpen(false);
+          setIsDialogOpen(true);
+        }}
+        event={detailEvent}
+      />
     </div>
   );
 }

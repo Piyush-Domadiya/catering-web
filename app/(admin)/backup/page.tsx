@@ -28,7 +28,7 @@ export default function BackupPage() {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = `testful-backup-${
+        a.download = `tasteful-backup-${
           new Date().toISOString().split("T")[0]
         }.json`;
         document.body.appendChild(a);

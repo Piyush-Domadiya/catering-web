@@ -2,8 +2,8 @@ import Navbar from "@/components/shared/Navbar";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "My Events | Testful Affaire",
-  description: "Manage your upcoming events with Testful Affaire",
+  title: "My Events | Tasteful Affaire",
+  description: "Manage your upcoming events with Tasteful Affaire",
 };
 
 export default function CustomerLayout({

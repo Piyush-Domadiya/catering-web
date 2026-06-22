@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getCurrentBusinessId } from "@/lib/auth-helpers";
+import { notifyInquiryReceived } from "@/lib/notifications";
 
 export async function GET(req: Request) {
   try {
@@ -11,6 +12,25 @@ export async function GET(req: Request) {
     }
 
     const { searchParams } = new URL(req.url);
+
+    // Auto-update past events to COMPLETED
+    // logic: if status is UPCOMING and date < today (00:00:00), mark as COMPLETED
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    await prisma.event.updateMany({
+      where: {
+        businessId,
+        status: "UPCOMING",
+        date: {
+          lt: today,
+        },
+      },
+      data: {
+        status: "COMPLETED",
+      },
+    });
+
     const customerId = searchParams.get("customerId");
 
     const events = await prisma.event.findMany({
@@ -94,6 +114,23 @@ export async function POST(req: Request) {
         customer: true,
       },
     });
+
+    // Notify Admin if created by Customer (public/customer portal)
+    // We don't await this to avoid blocking
+    if (!status || status === "UPCOMING" || status === "QUOTATION") {
+       const business = await prisma.business.findUnique({
+           where: { id: businessId },
+           select: { name: true }
+       });
+       
+       // Re-using inquiry notification for now as generic "New Booking/Inquiry"
+       notifyInquiryReceived(
+           business?.name || "Catering Service",
+           name + " (Event)", // Distinguish event from general inquiry
+           "Customer Portal", // We might not have phone handy in this scope easily without fetching user, but usually valid
+           businessId
+       ).catch((err: unknown) => console.error("Failed to send event notification:", err));
+    }
 
     return NextResponse.json(event);
   } catch (error: any) {

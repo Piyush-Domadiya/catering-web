@@ -13,17 +13,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Testful Affaire | Premium Catering Services",
+  title: "Tasteful Affaire | Premium Catering Services",
   description:
-    "Making Every Event Testful. Professional catering services for weddings, corporate events, and parties.",
+    "Making Every Event Tasteful. Professional catering services for weddings, corporate events, and parties.",
   icons: {
     icon: "/Logo.png",
     apple: "/Logo.png",
   },
   openGraph: {
-    title: "Testful Affaire | Premium Catering Services",
+    title: "Tasteful Affaire | Premium Catering Services",
     description:
-      "Making Every Event Testful. Professional catering services for weddings, corporate events, and parties.",
+      "Making Every Event Tasteful. Professional catering services for weddings, corporate events, and parties.",
     type: "website",
   },
 };
@@ -45,7 +45,7 @@ export default function RootLayout({
           <ThemeProvider
             attribute="class"
             defaultTheme="light"
-            enableSystem
+            enableSystem={false}
             disableTransitionOnChange
           >
             {children}

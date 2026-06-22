@@ -134,60 +134,108 @@ export default function EventDetailDialog({
             </div>
           </div>
 
-          {/* Pricing Summary (if available) */}
-          {Boolean(event.perPlateCost || event.taxRate || event.discount) && (
-            <div className="p-6 bg-bg-secondary/30 rounded-3xl border border-border-color">
-              <h3 className="text-sm font-bold text-text-primary mb-4 flex items-center gap-2">
-                <Tag className="h-4 w-4 text-amber-500" />
-                Pricing Details
-              </h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {event.perPlateCost && (
-                  <div>
-                    <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">
-                      Per Plate
-                    </p>
-                    <p className="text-sm font-bold text-text-primary">
-                      ₹{event.perPlateCost}
-                    </p>
-                  </div>
-                )}
-                {event.taxRate > 0 && (
-                  <div>
-                    <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">
-                      Tax
-                    </p>
-                    <p className="text-sm font-bold text-text-primary">
-                      {event.taxRate}%
-                    </p>
-                  </div>
-                )}
-                {event.discount > 0 && (
-                  <div>
-                    <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest text-red-500">
-                      Discount
-                    </p>
-                    <p className="text-sm font-bold text-red-500">
-                      ₹{event.discount}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
+          {/* Menu Options & Pricing */}
+          {(() => {
+            let options: any[] = [];
+            try {
+              const parsed = JSON.parse(event.menuItems || "[]");
+              options = parsed.options || (Array.isArray(parsed) ? [{ name: "Menu 1", items: JSON.stringify(parsed) }] : []);
+            } catch (e) {
+              if (event.menuItems) options = [{ name: "Menu 1", items: event.menuItems }];
+            }
 
-          {/* Menu Selection */}
-          {event.menuItems && (
-            <div className="space-y-3">
-              <h3 className="text-sm font-bold text-text-primary flex items-center gap-2">
-                <ClipboardList className="h-4 w-4 text-amber-500" />
-                Menu Selection
-              </h3>
-              <div className="p-6 bg-bg-secondary/50 rounded-3xl border border-border-color text-sm text-text-secondary leading-relaxed whitespace-pre-wrap">
-                {event.menuItems}
+            if (options.length === 0) return null;
+
+            return (
+              <div className="space-y-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <ClipboardList className="h-5 w-5 text-amber-500" />
+                  <h3 className="text-sm font-bold text-text-primary uppercase tracking-widest">
+                    Proposed Menu Options
+                  </h3>
+                </div>
+
+                <div className="grid grid-cols-1 gap-4">
+                  {options.map((option, idx) => {
+                    let optionTotal = 0;
+                    let items: any[] = [];
+                    try {
+                      const parsedItems = JSON.parse(option.items);
+                      if (Array.isArray(parsedItems)) {
+                        items = parsedItems;
+                        const base = items.reduce((acc, item) => acc + (item.price * (item.quantity || 1)), 0);
+                        const guests = event.guestCount || 1;
+                        const subtotal = guests > 1 ? base * guests : base;
+                        const tax = subtotal * ((event.taxRate || 0) / 100);
+                        const disc = event.discount || 0;
+                        optionTotal = Math.max(0, subtotal + tax - disc);
+                      }
+                    } catch (e) {}
+
+                    return (
+                      <details key={idx} className="group bg-bg-secondary/30 rounded-3xl border border-border-color overflow-hidden transition-all" open={idx === 0}>
+                        <summary className="flex items-center justify-between p-6 cursor-pointer hover:bg-bg-secondary/50 transition-colors list-none">
+                          <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500 font-bold">
+                              {idx + 1}
+                            </div>
+                            <div>
+                              <p className="font-bold text-text-primary">{option.name || `Option ${idx + 1}`}</p>
+                              <p className="text-xs text-text-muted">
+                                {items.length} items selected
+                              </p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest">Final Quote</p>
+                            <p className="text-lg font-black text-amber-600 dark:text-amber-500">
+                              ₹{optionTotal.toLocaleString('en-IN')}
+                            </p>
+                          </div>
+                        </summary>
+                        
+                        <div className="px-6 pb-6 pt-2 border-t border-border-color/50">
+                          <div className="space-y-4">
+                            {items.length > 0 ? (
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {items.map((item: any, i: number) => (
+                                  <div key={i} className="flex justify-between items-center p-3 bg-bg-primary/50 rounded-xl border border-border-color/50">
+                                    <span className="text-sm font-medium text-text-primary">{item.name} <span className="text-xs text-text-muted ml-1">x{item.quantity}</span></span>
+                                    <span className="text-sm font-bold text-text-secondary">₹{item.price * (item.quantity || 1)}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="text-sm text-text-secondary whitespace-pre-wrap">{option.items}</p>
+                            )}
+                            
+                            <div className="mt-4 p-4 bg-amber-500/5 rounded-2xl border border-amber-500/10 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                               <div>
+                                 <p className="text-[10px] font-bold text-text-muted">GST</p>
+                                 <p className="text-sm font-bold">{event.taxRate}%</p>
+                               </div>
+                               <div>
+                                 <p className="text-[10px] font-bold text-text-muted">DISCOUNT</p>
+                                 <p className="text-sm font-bold">₹{event.discount}</p>
+                               </div>
+                               <div>
+                                 <p className="text-[10px] font-bold text-text-muted">GUESTS</p>
+                                 <p className="text-sm font-bold">{event.guestCount || 1}</p>
+                               </div>
+                               <div className="md:border-l border-amber-500/20">
+                                 <p className="text-[10px] font-bold text-amber-600">TOTAL</p>
+                                 <p className="text-sm font-black text-amber-600">₹{optionTotal.toLocaleString('en-IN')}</p>
+                               </div>
+                            </div>
+                          </div>
+                        </div>
+                      </details>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
         </div>
 
         {/* Footer Actions */}

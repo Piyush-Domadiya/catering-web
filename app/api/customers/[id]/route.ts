@@ -1,11 +1,17 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { auth } from "@/auth";
 
 export async function GET(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await auth();
+    if (!session || !session.user?.businessId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
     const { id } = await params;
     const customer = await prisma.customer.findUnique({
       where: { id },
@@ -14,7 +20,7 @@ export async function GET(
       },
     });
 
-    if (!customer) {
+    if (!customer || customer.businessId !== session.user.businessId) {
       return new NextResponse("Customer not found", { status: 404 });
     }
 
@@ -30,8 +36,19 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await auth();
+    if (!session || !session.user?.businessId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
     const { id } = await params;
     const { name, email, phone, address } = await req.json();
+
+    // Ensure the customer belongs to the same business
+    const existing = await prisma.customer.findUnique({ where: { id } });
+    if (!existing || existing.businessId !== session.user.businessId) {
+      return new NextResponse("Customer not found", { status: 404 });
+    }
 
     const customer = await prisma.customer.update({
       where: { id },
@@ -61,10 +78,19 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await auth();
+    if (!session || !session.user?.businessId) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
     const { id } = await params;
-    await prisma.customer.delete({
-      where: { id },
-    });
+
+    const existing = await prisma.customer.findUnique({ where: { id } });
+    if (!existing || existing.businessId !== session.user.businessId) {
+      return new NextResponse("Customer not found", { status: 404 });
+    }
+
+    await prisma.customer.delete({ where: { id } });
 
     return new NextResponse(null, { status: 204 });
   } catch (error: any) {

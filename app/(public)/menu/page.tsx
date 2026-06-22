@@ -3,6 +3,7 @@ import { MenuGrid } from "@/components/public/MenuGrid";
 import { Check, Crown } from "lucide-react";
 import prisma from "@/lib/prisma";
 import { MenuHero } from "@/components/public/MenuHero";
+import Link from "next/link";
 
 export const revalidate = 60; // Revalidate every minute
 
@@ -97,9 +98,11 @@ export default async function MenuPage() {
                     ))}
                   </ul>
 
-                  <button className="w-full py-4 rounded-xl font-bold transition-all flex items-center justify-center gap-2 bg-bg-secondary text-text-primary hover:bg-gradient-to-r hover:from-amber-500 hover:to-amber-600 hover:text-white hover:shadow-lg hover:shadow-amber-500/25 active:scale-95 duration-300">
-                    Select Package
-                  </button>
+                  <Link href="/contact" className="w-full">
+                    <button className="w-full py-4 rounded-xl font-bold transition-all flex items-center justify-center gap-2 bg-bg-secondary text-text-primary hover:bg-gradient-to-r hover:from-amber-500 hover:to-amber-600 hover:text-white hover:shadow-lg hover:shadow-amber-500/25 active:scale-95 duration-300">
+                      Select Package
+                    </button>
+                  </Link>
                 </div>
               ))}
             </div>
@@ -113,7 +116,6 @@ export default async function MenuPage() {
       {/* Bespoke CTA */}
       <div className="py-24 relative overflow-hidden">
         <div className="absolute inset-0 bg-amber-500"></div>
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
         <div className="absolute -left-20 -bottom-20 w-96 h-96 bg-bg-primary/10 rounded-full blur-3xl"></div>
         <div className="absolute -right-20 -top-20 w-96 h-96 bg-black/10 rounded-full blur-3xl"></div>
 
@@ -125,9 +127,11 @@ export default async function MenuPage() {
             Let&apos;s design a custom menu that tells your story through
             flavor, texture, and presentation.
           </p>
-          <button className="bg-text-primary text-bg-primary px-12 py-5 rounded-full font-bold text-lg hover:bg-amber-600 hover:text-white transition-all shadow-2xl active:scale-95">
-            Request Bespoke Consultation
-          </button>
+          <Link href="/contact">
+            <button className="bg-text-primary text-bg-primary px-12 py-5 rounded-full font-bold text-lg hover:bg-amber-600 hover:text-white transition-all shadow-2xl active:scale-95">
+              Request Bespoke Consultation
+            </button>
+          </Link>
         </div>
       </div>
     </div>

@@ -62,18 +62,16 @@ export default function CustomerEventsDialog({
       <div className="bg-bg-primary rounded-[2.5rem] p-8 max-w-2xl w-full border border-border-color shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
         <div className="flex justify-between items-center mb-6 shrink-0">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+            <h2 className="text-2xl font-bold text-text-primary">
               Events History
             </h2>
-            <p className="text-gray-500 dark:text-gray-400">
-              For {customerName}
-            </p>
+            <p className="text-text-muted">For {customerName}</p>
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-slate-800 rounded-xl transition-colors"
+            className="p-2 hover:bg-bg-secondary rounded-xl transition-colors"
           >
-            <X className="h-6 w-6 text-gray-500" />
+            <X className="h-6 w-6 text-text-muted" />
           </button>
         </div>
 
@@ -83,7 +81,7 @@ export default function CustomerEventsDialog({
               <Loader2 className="h-8 w-8 animate-spin text-amber-500" />
             </div>
           ) : events.length === 0 ? (
-            <div className="py-20 text-center text-gray-500 dark:text-gray-400">
+            <div className="py-20 text-center text-text-muted">
               No events found for this customer.
             </div>
           ) : (
@@ -92,10 +90,10 @@ export default function CustomerEventsDialog({
                 <button
                   key={event.id}
                   onClick={() => onEventClick(event)}
-                  className="w-full text-left p-4 rounded-2xl bg-gray-50 dark:bg-slate-800/50 hover:bg-amber-50 dark:hover:bg-amber-500/10 border border-transparent hover:border-amber-200 dark:hover:border-amber-500/20 transition-all group"
+                  className="w-full text-left p-4 rounded-2xl bg-bg-secondary hover:bg-bg-tertiary border border-transparent hover:border-amber-200 transition-all group"
                 >
                   <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-500 transition-colors">
+                    <h3 className="font-bold text-text-primary group-hover:text-amber-600 transition-colors">
                       {event.name}
                     </h3>
                     <span
@@ -111,7 +109,7 @@ export default function CustomerEventsDialog({
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2 text-sm text-gray-600 dark:text-gray-400">
+                  <div className="grid grid-cols-2 gap-2 text-sm text-text-secondary">
                     <div className="flex items-center gap-2">
                       <Calendar className="h-4 w-4 text-amber-500" />
                       {new Date(event.date).toLocaleDateString()}

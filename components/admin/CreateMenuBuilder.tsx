@@ -11,7 +11,11 @@ import {
   ShoppingCart,
   Copy,
   Printer,
+  Save,
+  Loader2,
+  Calendar as CalendarIcon,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface Category {
   id: string;
@@ -29,17 +33,29 @@ interface MenuItem {
   available: boolean;
 }
 
+interface Event {
+  id: string;
+  name: string;
+  date: Date;
+  type: string;
+}
+
 interface CreateMenuBuilderProps {
   initialItems: MenuItem[];
   categories: Category[];
+  events: Event[];
 }
 
 export function CreateMenuBuilder({
   initialItems,
   categories,
+  events,
 }: CreateMenuBuilderProps) {
+  const router = useRouter();
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedEventId, setSelectedEventId] = useState<string>("");
+  const [isSaving, setIsSaving] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
     if (typeof window !== "undefined") {
       return window.innerWidth >= 1024;
@@ -94,6 +110,60 @@ export function CreateMenuBuilder({
   // Print the menu using the browser's print dialog (optimized with print-specific CSS classes)
   const printMenu = () => {
     window.print();
+  };
+
+  const handleSaveToEvent = async () => {
+    if (!selectedEventId) {
+      alert("Please select an event to save to.");
+      return;
+    }
+
+    if (selectedItems.size === 0) {
+      alert("Please select items to save.");
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      // Group items by category for the text format
+      const itemsToSave = initialItems.filter((item) =>
+        selectedItems.has(item.id),
+      );
+      const categorizedItems: Record<string, MenuItem[]> = {};
+
+      itemsToSave.forEach((item) => {
+        const catName = item.category.name;
+        if (!categorizedItems[catName]) categorizedItems[catName] = [];
+        categorizedItems[catName].push(item);
+      });
+
+      let menuText = "";
+      Object.entries(categorizedItems).forEach(([category, items]) => {
+        menuText += `\n${category}:`;
+        items.forEach((item) => {
+          menuText += `\n  - ${item.name} - ₹${item.price}`;
+        });
+      });
+      menuText += `\n\nTotal Estimated Price: ₹${totalPrice}`;
+
+      const res = await fetch(`/api/events/${selectedEventId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ menuItems: menuText }),
+      });
+
+      if (res.ok) {
+        alert("Menu saved to event successfully!");
+        // Optional: Redirect or clear selection
+      } else {
+        alert("Failed to save menu");
+      }
+    } catch (error) {
+      console.error("Error saving menu:", error);
+      alert("Failed to save menu");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -270,7 +340,6 @@ export function CreateMenuBuilder({
                 <Copy className="h-4 w-4" />
                 Copy
               </button>
-              {/* Print Button - Helper for printing */}
               <button
                 onClick={printMenu}
                 disabled={selectedItems.size === 0}
@@ -278,6 +347,40 @@ export function CreateMenuBuilder({
               >
                 <Printer className="h-4 w-4" />
                 Print
+              </button>
+            </div>
+
+            {/* Save to Event Section */}
+            <div className="pt-4 border-t border-border-color space-y-3 print:hidden">
+              <label className="text-sm font-bold text-text-secondary flex items-center gap-2">
+                <CalendarIcon className="h-4 w-4" />
+                Save to Event
+              </label>
+              <select
+                value={selectedEventId}
+                onChange={(e) => setSelectedEventId(e.target.value)}
+                className="w-full px-3 py-2 rounded-xl bg-bg-tertiary border border-border-color focus:border-amber-500 focus:outline-none text-sm"
+              >
+                <option value="">Select an Event...</option>
+                {events.map((event) => (
+                  <option key={event.id} value={event.id}>
+                    {event.name} ({new Date(event.date).toLocaleDateString()})
+                  </option>
+                ))}
+              </select>
+              <button
+                onClick={handleSaveToEvent}
+                disabled={
+                  selectedItems.size === 0 || !selectedEventId || isSaving
+                }
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-amber-500 text-white font-bold hover:bg-amber-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                {isSaving ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Save className="h-4 w-4" />
+                )}
+                Save to Event
               </button>
             </div>
           </div>

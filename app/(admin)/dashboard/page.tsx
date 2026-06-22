@@ -137,6 +137,7 @@ export default function DashboardPage() {
       icon: Users,
       color: "bg-emerald-500",
       change: "+0%",
+      href: "/customers",
     },
     {
       name: "Upcoming Events",
@@ -144,6 +145,7 @@ export default function DashboardPage() {
       icon: Calendar,
       color: "bg-amber-500",
       change: "+0%",
+      href: "/events",
     },
     {
       name: "Total Events",
@@ -159,6 +161,7 @@ export default function DashboardPage() {
       icon: UserSquare2,
       color: "bg-purple-500",
       change: "+0%",
+      href: "/staff",
     },
   ];
 

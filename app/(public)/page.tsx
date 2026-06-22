@@ -24,9 +24,16 @@ export default async function HomePage() {
     take: 3,
   });
 
+  const testimonials = await prisma.testimonial.findMany({
+    orderBy: { createdAt: "desc" },
+    take: 3,
+  });
+
+  const settings = await prisma.globalSettings.findFirst();
+
   return (
     <div className="flex flex-col gap-20 pb-20 bg-transparent transition-colors duration-500">
-      <HomeHero />
+      <HomeHero settings={settings} />
 
       {/* Trusted By Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 relative z-20">
@@ -77,7 +84,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <HomeTestimonials />
+      <HomeTestimonials testimonials={testimonials} />
 
       {/* About Us Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
@@ -112,7 +119,7 @@ export default async function HomePage() {
               A Passion for Food and Unforgettable Moments
             </h2>
             <p className="text-text-secondary text-lg leading-relaxed">
-              At Testful Affaire, we believe that every event is an opportunity
+              At Tasteful Affaire, we believe that every event is an opportunity
               to create a masterpiece. Founded by culinary enthusiasts, our
               mission is to deliver exceptional taste with impeccable service.
             </p>

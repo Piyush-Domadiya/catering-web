@@ -4,21 +4,28 @@ import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
 
 interface Testimonial {
+  id: string;
   name: string;
   role: string;
   content: string;
   rating: number;
 }
 
-const testimonials: Testimonial[] = [
+interface HomeTestimonialsProps {
+  testimonials: Testimonial[];
+}
+
+const fallbackTestimonials: Testimonial[] = [
   {
+    id: "1",
     name: "Sarah Jenkins",
     role: "Event Planner, TechCorp",
     content:
-      "Testful Affaire transformed our annual gala into a legendary experience. The attention to detail and flavor profile were unmatched.",
+      "Tasteful Affaire transformed our annual gala into a legendary experience. The attention to detail and flavor profile were unmatched.",
     rating: 5,
   },
   {
+    id: "2",
     name: "Michael & Emily",
     role: "Newlyweds",
     content:
@@ -26,6 +33,7 @@ const testimonials: Testimonial[] = [
     rating: 5,
   },
   {
+    id: "3",
     name: "David Chen",
     role: "Private Client",
     content:
@@ -34,7 +42,9 @@ const testimonials: Testimonial[] = [
   },
 ];
 
-export function HomeTestimonials() {
+export function HomeTestimonials({ testimonials }: HomeTestimonialsProps) {
+  const displayTestimonials =
+    testimonials.length > 0 ? testimonials : fallbackTestimonials;
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative">
       {/* Ambient Background Glow */}
@@ -47,15 +57,15 @@ export function HomeTestimonials() {
         <div className="w-20 h-1 bg-gradient-to-r from-amber-500 to-amber-600 mx-auto rounded-full glow-amber-sm" />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
-        {testimonials.map((t, i) => (
+      <div className="flex flex-nowrap md:grid md:grid-cols-3 gap-6 md:gap-8 relative z-10 overflow-x-auto pb-10 snap-x snap-mandatory no-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
+        {displayTestimonials.map((t, i) => (
           <motion.div
             key={t.name}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: i * 0.1 }}
-            className="glass p-8 rounded-[2rem] border border-border-color dark:border-gray-800/50 relative group hover:border-amber-400/50 dark:hover:border-amber-500/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-amber-500/10"
+            initial={{ opacity: 0, scale: 0.9, x: 20 }}
+            whileInView={{ opacity: 1, scale: 1, x: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ delay: i * 0.1, duration: 0.6 }}
+            className="glass p-8 rounded-[2rem] border border-border-color dark:border-gray-800/50 relative group hover:border-amber-400/50 dark:hover:border-amber-500/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-amber-500/10 min-w-[300px] md:min-w-0 snap-center"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent rounded-[2rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
 
@@ -87,6 +97,15 @@ export function HomeTestimonials() {
             </div>
           </motion.div>
         ))}
+      </div>
+
+      {/* Mobile Swipe Indicator */}
+      <div className="md:hidden flex justify-center mt-2">
+        <div className="flex gap-1.5 items-center">
+          {displayTestimonials.map((_, i) => (
+            <div key={i} className="w-1.5 h-1.5 rounded-full bg-amber-500/20" />
+          ))}
+        </div>
       </div>
     </section>
   );

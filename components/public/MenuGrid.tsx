@@ -3,11 +3,28 @@
 import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Filter, ShoppingBag, ArrowRight } from "lucide-react";
+import { Search, Filter, Star, StarHalf, MessageSquare, Loader2, CheckCircle2 } from "lucide-react";
 import { MenuCategory, MenuItem } from "@prisma/client";
+import { Modal } from "@/components/shared/Modal";
+import { submitReview } from "@/app/actions/reviews";
 
 // Extended type to include category relation if needed, though for filtering simple ID matching is enough
-type MenuItemWithCategory = MenuItem & { category: MenuCategory };
+// Extended type for review details
+type ReviewDetails = {
+  id: string;
+  name: string;
+  rating: number;
+  content: string | null;
+  createdAt: Date;
+};
+
+// Extended type to include category relation and review stats
+type MenuItemWithCategory = MenuItem & { 
+  category: MenuCategory;
+  reviewCount: number;
+  averageRating: number;
+  reviews: ReviewDetails[];
+};
 
 interface MenuGridProps {
   categories: MenuCategory[];
@@ -17,21 +34,58 @@ interface MenuGridProps {
 export function MenuGrid({ categories, items }: MenuGridProps) {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const [reviewingItem, setReviewingItem] = useState<MenuItem | null>(null);
+  const [viewingReviewsItem, setViewingReviewsItem] = useState<MenuItemWithCategory | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [rating, setRating] = useState(5);
 
-  // Enhance categories with "All"
+  // Ensure unique category names and enhance with "All"
+  const uniqueCategoryNames = Array.from(
+    new Set(categories.map((c) => c.name)),
+  ).sort();
+
   const filterCategories = [
     { id: "All", name: "All" },
-    ...categories.map((c) => ({ id: c.id, name: c.name })),
+    ...uniqueCategoryNames.map((name) => ({ id: name, name })),
   ];
 
   const filteredItems = items.filter((item) => {
     const matchesCategory =
-      selectedCategory === "All" || item.categoryId === selectedCategory;
+      selectedCategory === "All" || item.category.name === selectedCategory;
     const matchesSearch =
       item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.description?.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
+
+  const handleReviewSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!reviewingItem) return;
+
+    setIsSubmitting(true);
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      itemId: reviewingItem.id,
+      name: formData.get("name") as string,
+      phone: formData.get("phone") as string,
+      rating: rating,
+      content: formData.get("content") as string,
+    };
+
+    const result = await submitReview(data);
+    if (result.success) {
+      setIsSuccess(true);
+      setTimeout(() => {
+        setReviewingItem(null);
+        setIsSuccess(false);
+        setRating(5);
+      }, 2000);
+    } else {
+      alert(result.error || "Failed to submit review");
+    }
+    setIsSubmitting(false);
+  };
 
   return (
     <>
@@ -104,22 +158,21 @@ export function MenuGrid({ categories, items }: MenuGridProps) {
 
                 <div className="flex flex-col sm:flex-row gap-6 h-full relative z-10">
                   {/* Image with Hover Effect */}
-                  <div className="relative w-full sm:w-48 h-56 sm:h-auto rounded-[2rem] overflow-hidden flex-shrink-0 shadow-lg">
-                    <Image
-                      src={
-                        item.image ||
-                        "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80"
-                      }
-                      alt={item.name}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500"></div>
-                  </div>
+                  {item.image && (
+                    <div className="relative w-full sm:w-48 h-56 sm:h-auto rounded-[2rem] overflow-hidden flex-shrink-0 shadow-lg">
+                      <Image
+                        src={item.image}
+                        alt={item.name}
+                        fill
+                        className="object-cover group-hover:scale-110 transition-transform duration-700"
+                      />
+                      <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500"></div>
+                    </div>
+                  )}
 
                   {/* Content */}
                   <div className="flex-1 flex flex-col justify-center py-2 pr-2">
-                    <div className="flex justify-between items-start mb-3">
+                    <div className="flex justify-between items-start gap-4 mb-3">
                       <div>
                         <span className="inline-block bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-500 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mb-2 border border-amber-100 dark:border-amber-500/20">
                           {item.category.name}
@@ -128,25 +181,50 @@ export function MenuGrid({ categories, items }: MenuGridProps) {
                           {item.name}
                         </h3>
                       </div>
-                      <span className="text-xl font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 px-3 py-1 rounded-xl">
-                        ₹{item.price}
-                      </span>
+                      
+                      <div className="flex flex-col items-end gap-3 shrink-0">
+                        {item.reviewCount > 0 && (
+                          <div 
+                            onClick={() => setViewingReviewsItem(item)}
+                            className="flex flex-col items-end gap-1 cursor-pointer group/rating hover:opacity-80 transition-opacity"
+                          >
+                            <div className="flex items-center gap-1.5">
+                              <div className="flex gap-0.5">
+                                {[1, 2, 3, 4, 5].map((s) => {
+                                  if (s <= Math.floor(item.averageRating)) {
+                                    return <Star key={s} className="h-3 w-3 text-amber-500 fill-current" />;
+                                  } else if (s === Math.ceil(item.averageRating) && item.averageRating % 1 !== 0) {
+                                    return <StarHalf key={s} className="h-3 w-3 text-amber-500 fill-current" />;
+                                  } else {
+                                    return <Star key={s} className="h-3 w-3 text-gray-300 dark:text-gray-600" />;
+                                  }
+                                })}
+                              </div>
+                              <span className="text-[10px] font-bold text-text-muted group-hover/rating:text-amber-500 transition-colors">
+                                ({item.reviewCount})
+                              </span>
+                            </div>
+                            <span className="text-[11px] font-bold text-amber-600 dark:text-amber-500">
+                              {item.averageRating.toFixed(1)} / 5.0
+                            </span>
+                          </div>
+                        )}
+                        
+                        <button
+                          onClick={() => setReviewingItem(item)}
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold text-amber-600 dark:text-amber-500 bg-amber-50 dark:bg-amber-500/10 border border-amber-100 dark:border-amber-500/20 hover:bg-amber-500 hover:text-white dark:hover:bg-amber-500 dark:hover:text-white transition-all duration-300 group/btn shadow-sm"
+                        >
+                          <MessageSquare className="h-3 w-3" />
+                          Review
+                        </button>
+                      </div>
                     </div>
 
-                    <p className="text-text-secondary text-sm mb-6 line-clamp-2 leading-relaxed">
-                      {item.description ||
-                        "A masterpiece of flavors, carefully curated for an exquisite dining experience."}
-                    </p>
-
-                    <div className="mt-auto flex gap-3">
-                      <button className="flex-1 group/btn flex items-center justify-center gap-2 bg-bg-secondary text-text-primary font-bold py-3.5 rounded-xl hover:bg-amber-500 hover:text-white transition-all text-sm border border-border-color hover:border-amber-500">
-                        View Details
-                        <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
-                      </button>
-                      <button className="w-14 h-14 flex items-center justify-center bg-text-primary text-bg-primary rounded-xl hover:bg-amber-500 hover:text-white transition-all shadow-lg hover:shadow-amber-500/30 hover:scale-105 active:scale-95">
-                        <ShoppingBag className="h-5 w-5" />
-                      </button>
-                    </div>
+                    {item.description && (
+                      <p className="text-text-secondary text-sm mb-6 line-clamp-2 leading-relaxed">
+                        {item.description}
+                      </p>
+                    )}
                   </div>
                 </div>
               </motion.div>
@@ -172,12 +250,152 @@ export function MenuGrid({ categories, items }: MenuGridProps) {
                 }}
                 className="text-amber-500 font-bold hover:text-amber-400 transition-colors flex items-center justify-center gap-2 mx-auto"
               >
-                Clear all filters <ArrowRight className="h-4 w-4" />
+                Clear all filters
               </button>
             </div>
           )}
         </div>
       </div>
+
+      {/* Review Modal */}
+      <Modal
+        isOpen={!!reviewingItem}
+        onClose={() => !isSubmitting && setReviewingItem(null)}
+        title={`Review ${reviewingItem?.name}`}
+      >
+        <AnimatePresence mode="wait">
+          {isSuccess ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="flex flex-col items-center justify-center py-10 text-center"
+            >
+              <div className="w-16 h-16 bg-green-100 dark:bg-green-500/20 rounded-2xl flex items-center justify-center text-green-600 dark:text-green-500 mb-6">
+                <CheckCircle2 className="h-8 w-8" />
+              </div>
+              <h3 className="text-xl font-bold text-text-primary mb-2">Review Submitted!</h3>
+              <p className="text-text-secondary">Thank you for your valuable feedback.</p>
+            </motion.div>
+          ) : (
+            <form onSubmit={handleReviewSubmit} className="space-y-5">
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Rating</label>
+                <div className="flex gap-2">
+                  {[1, 2, 3, 4, 5].map((s) => (
+                    <button
+                      key={s}
+                      type="button"
+                      onClick={() => setRating(s)}
+                      className={`p-1 transition-all ${s <= rating ? 'text-amber-500' : 'text-gray-300 dark:text-gray-600'}`}
+                    >
+                      <Star className={`h-6 w-6 ${s <= rating ? 'fill-current' : ''}`} />
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Name</label>
+                  <input
+                    required
+                    name="name"
+                    type="text"
+                    placeholder="Your Name"
+                    className="w-full px-4 py-3 rounded-xl bg-bg-secondary border border-border-color focus:bg-bg-primary focus:border-amber-500 focus:outline-none transition-all text-sm text-text-primary"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Mobile No.</label>
+                  <input
+                    required
+                    name="phone"
+                    type="tel"
+                    placeholder="Your Mobile Number"
+                    className="w-full px-4 py-3 rounded-xl bg-bg-secondary border border-border-color focus:bg-bg-primary focus:border-amber-500 focus:outline-none transition-all text-sm text-text-primary"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-text-muted uppercase tracking-widest">Review (Optional)</label>
+                <textarea
+                  name="content"
+                  rows={3}
+                  placeholder="What did you think of this item?"
+                  className="w-full px-4 py-3 rounded-xl bg-bg-secondary border border-border-color focus:bg-bg-primary focus:border-amber-500 focus:outline-none transition-all text-sm text-text-primary resize-none"
+                />
+              </div>
+
+              <button
+                disabled={isSubmitting}
+                type="submit"
+                className="w-full py-4 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  "Submit Review"
+                )}
+              </button>
+            </form>
+          )}
+        </AnimatePresence>
+      </Modal>
+
+      {/* View Reviews Modal */}
+      <Modal
+        isOpen={!!viewingReviewsItem}
+        onClose={() => setViewingReviewsItem(null)}
+        title={`Reviews for ${viewingReviewsItem?.name}`}
+      >
+        <div className="space-y-6 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+          {viewingReviewsItem?.reviews && viewingReviewsItem.reviews.length > 0 ? (
+            viewingReviewsItem.reviews.map((review) => (
+              <div key={review.id} className="p-4 rounded-2xl bg-bg-secondary border border-border-color space-y-2">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="font-bold text-text-primary text-sm">{review.name}</p>
+                    <div className="flex gap-0.5 mt-1">
+                      {[1, 2, 3, 4, 5].map((s) => (
+                        <Star 
+                          key={s} 
+                          className={`h-3 w-3 ${s <= review.rating ? 'text-amber-500 fill-current' : 'text-gray-300 dark:text-gray-600'}`} 
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  <span className="text-[10px] text-text-muted font-medium italic">
+                    {new Date(review.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
+                {review.content && (
+                  <p className="text-sm text-text-secondary leading-relaxed pt-1 italic">
+                    &ldquo;{review.content}&rdquo;
+                  </p>
+                )}
+              </div>
+            ))
+          ) : (
+            <div className="text-center py-10">
+              <p className="text-text-muted">No reviews yet for this item.</p>
+            </div>
+          )}
+        </div>
+        
+        <button
+          onClick={() => {
+            setReviewingItem(viewingReviewsItem);
+            setViewingReviewsItem(null);
+          }}
+          className="w-full mt-6 py-4 bg-amber-500 hover:bg-amber-600 text-white rounded-2xl font-bold transition-all active:scale-[0.98]"
+        >
+          Rate this item
+        </button>
+      </Modal>
     </>
   );
 }

@@ -263,7 +263,15 @@ export function MenuManager({ initialItems, categories }: MenuManagerProps) {
         title={editingItem ? "Edit Menu Item" : "Add New Item"}
       >
         <MenuForm
-          initialData={editingItem}
+          initialData={
+            editingItem
+              ? {
+                  ...editingItem,
+                  description: editingItem.description || undefined,
+                  image: editingItem.image || undefined,
+                }
+              : undefined
+          }
           categories={categories}
           onSubmit={handleSubmit}
           isLoading={isLoading}

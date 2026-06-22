@@ -4,10 +4,35 @@ import { notifyInquiryReceived } from "@/lib/notifications";
 
 export async function POST(req: Request) {
   try {
-    const { name, phone, email, eventType, guestCount, eventDate, items, totalCost, businessId } = await req.json();
+    const { name, phone, email, eventType, guestCount, eventDate, items, totalCost, businessId: initialBusinessId } = await req.json();
 
-    if (!name || !phone || !businessId) {
-      return new NextResponse("Missing required fields", { status: 400 });
+    if (!name || !phone) {
+      return new NextResponse("Missing name or phone", { status: 400 });
+    }
+
+    // Determine target business
+    let businessId = initialBusinessId;
+    if (!businessId) {
+        const defaultBusiness = await prisma.business.findFirst();
+        businessId = defaultBusiness?.id;
+    }
+
+    if (!businessId) {
+        return new NextResponse("Business ID required", { status: 400 });
+    }
+
+    // Verify business exists
+    const business = await prisma.business.findUnique({
+        where: { id: businessId }
+    });
+
+    if (!business) {
+        // Fallback to first business if provided ID is invalid
+        const fallbackBusiness = await prisma.business.findFirst();
+        if (!fallbackBusiness) {
+            return new NextResponse("Business not found", { status: 400 });
+        }
+        businessId = fallbackBusiness.id;
     }
 
     // Create inquiry
@@ -30,7 +55,7 @@ export async function POST(req: Request) {
     });
 
     // Notify admin (async)
-    notifyInquiryReceived("Testful Affaire", name, phone, businessId, admin?.id).catch(console.error);
+    notifyInquiryReceived(business?.name || "Tasteful Affaire", name, phone, businessId, admin?.id).catch(console.error);
 
     return NextResponse.json(inquiry);
   } catch (error: any) {

@@ -65,11 +65,15 @@ export function PublicMenuBuilder({
     eventDate: "",
   });
 
+  const uniqueCategories = useMemo(() => {
+    return Array.from(new Map(initialCategories.map(cat => [cat.name, cat])).values());
+  }, [initialCategories]);
+
   // Filter items based on category and search
   const filteredItems = useMemo(() => {
     return initialItems.filter((item) => {
       const matchesCategory =
-        activeCategory === "all" || item.categoryId === activeCategory;
+        activeCategory === "all" || item.category?.name === activeCategory;
       const matchesSearch = item.name
         .toLowerCase()
         .includes(searchQuery.toLowerCase());
@@ -167,12 +171,12 @@ export function PublicMenuBuilder({
           >
             All Items
           </button>
-          {initialCategories.map((cat) => (
+          {uniqueCategories.map((cat) => (
             <button
               key={cat.id}
-              onClick={() => setActiveCategory(cat.id)}
+              onClick={() => setActiveCategory(cat.name)}
               className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${
-                activeCategory === cat.id
+                activeCategory === cat.name
                   ? "bg-amber-500 text-white shadow-lg shadow-amber-500/25"
                   : "bg-bg-secondary text-text-secondary hover:bg-bg-tertiary"
               }`}

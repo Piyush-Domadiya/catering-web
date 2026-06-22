@@ -97,7 +97,7 @@ export default function RegisterPage() {
         Account Created Successfully!
       </h2>
       <p className="text-text-secondary">
-        Welcome to Testful Affaire! Your account is ready.
+        Welcome to Tasteful Affaire! Your account is ready.
       </p>
 
       <div className="bg-bg-secondary p-6 rounded-2xl border border-border-color text-left space-y-4">
